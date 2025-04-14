@@ -7,6 +7,7 @@ public class CamFollow : MonoBehaviour
     [SerializeField] GameObject pc1Obj;
     [SerializeField] GameObject pc2Obj;
      CamLerp camLerp;
+    public bool isLerping = false;
 
     // Start is called before the first frame update
     void Start()
@@ -15,16 +16,19 @@ public class CamFollow : MonoBehaviour
         camLerp = GetComponent<CamLerp>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (camLerp.p1Active)
+        if (isLerping)
         {
-            transform.position = pc1Obj.transform.position;
+            return; // Skip updates during lerp
         }
-        else if (!camLerp.p1Active)
+        else
         {
-            transform.position = pc2Obj.transform.position;
+            // Smoothly interpolate the camera's position
+            Vector3 targetPosition = camLerp.p1Active ? pc1Obj.transform.position : pc2Obj.transform.position;
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5f); // Adjust smoothing speed
         }
+
     }
+
 }

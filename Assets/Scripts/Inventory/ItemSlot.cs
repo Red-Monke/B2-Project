@@ -14,6 +14,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     public bool isFull;
     public string itemDescription;
     public Sprite emptySprite;
+    public Vector3 itemScale;
 
     [SerializeField] int maxNumberOfItems;
     #endregion
@@ -44,13 +45,8 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         itemSprite = emptySprite;
     }
 
-    public int AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription)
+    public void AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription, Vector3 itemScale)
     {
-        //check to see if slot is full
-        if (isFull)
-        {
-            return quantity;
-        }
         //update name
         this.itemName = itemName;
         
@@ -61,25 +57,15 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         //update description
         this.itemDescription = itemDescription;
 
+        //update item scale
+        this.itemScale = itemScale;
+
         //update quantity
-        this.itemQuantity += quantity;
-        if(this.itemQuantity >= maxNumberOfItems)
-        {
-            quantityText.text = quantity.ToString();
-            quantityText.enabled = true;
-            isFull = true;
-        
-            //return leftover items
-            int extraItems = this.itemQuantity - maxNumberOfItems;
-            this.itemQuantity = maxNumberOfItems;
-            return extraItems;
-        }
+        this.itemQuantity = quantity;
 
         //update quatity text
         quantityText.text = this.itemQuantity.ToString();
         quantityText.enabled = true;
-
-        return 0;
 
     }
 
