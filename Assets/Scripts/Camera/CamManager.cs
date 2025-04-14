@@ -19,12 +19,12 @@ public class CamManager : MonoBehaviour
     void Update()
     {
         // Check for input to start lerp
-        if (cSwitch.p1Active && Input.GetKeyDown(KeyCode.Q))
+        if (!isLerping && cSwitch.p1Active && Input.GetKeyDown(KeyCode.Q))
         {
             StartCoroutine(LerpToPosition(pc2Obj.transform.position, lerpDuration));
             cSwitch.p1Active = false; // Switch active player
         }
-        else if (!cSwitch.p1Active && Input.GetKeyDown(KeyCode.Q))
+        else if (!isLerping && !cSwitch.p1Active && Input.GetKeyDown(KeyCode.Q))
         {
             StartCoroutine(LerpToPosition(pc1Obj.transform.position, lerpDuration));
             cSwitch.p1Active = true; // Switch active player
@@ -55,5 +55,8 @@ public class CamManager : MonoBehaviour
 
         transform.position = targetPos; // Ensure accurate final position
         isLerping = false;              // Resume regular follow logic
+
+        // Update the active player state after lerping
+        cSwitch.p1Active = (targetPos == pc1Obj.transform.position);
     }
 }

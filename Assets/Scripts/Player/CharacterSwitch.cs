@@ -27,13 +27,13 @@ public class CharacterSwitch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!p1Active && Input.GetKeyDown(KeyCode.Q))
+        if(p1Active && Input.GetKeyDown(KeyCode.Q))
         {
             SwitchToCharacter2();
             Debug.Log("switching to PC2");
         }
         
-        if(p1Active && Input.GetKeyDown(KeyCode.Q))
+        if(!p1Active && Input.GetKeyDown(KeyCode.Q))
         {
             SwitchToCharacter1();
             Debug.Log("switching to PC1");
@@ -45,8 +45,6 @@ public class CharacterSwitch : MonoBehaviour
         p1Move.enabled = false;
         p1InventoryMan.enabled = false;
 
-        p1Active = false;
-
         p2Move.enabled = true;
         p2InventoryMan.enabled = true;
     }
@@ -55,8 +53,6 @@ public class CharacterSwitch : MonoBehaviour
     {
         p1Move.enabled = true;
         p1InventoryMan.enabled = true;
-
-        p1Active = true;
 
         p2Move.enabled = false;
         p2InventoryMan.enabled = false;
