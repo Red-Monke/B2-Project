@@ -7,10 +7,10 @@ public class CamLerp : MonoBehaviour
     public bool p1Active;
 
     [SerializeField] float lerpDuration = 1f;
-    [SerializeField] float lerpTime;
     [SerializeField] GameObject pc1Pos;
     [SerializeField] GameObject pc2Pos;
     CamFollow camFollow;
+    public CharacterSwitch cSwitch;
 
     // Start is called before the first frame update
     void Start()
@@ -23,48 +23,52 @@ public class CamLerp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if(p1Active && Input.GetKeyDown(KeyCode.Q))
+        if(cSwitch.p1Active && Input.GetKeyDown(KeyCode.Q))
         {
-            StartCoroutine(LerpToPC2(pc2Pos.transform.position, lerpDuration));
+            Debug.Log("Starting LerpToPC2...");
+            StartCoroutine(LerpToPC2(transform.position, pc2Pos.transform.position, lerpDuration));
         }
 
-        if(!p1Active && Input.GetKeyDown(KeyCode.Q))
+        if(!cSwitch.p1Active && Input.GetKeyDown(KeyCode.Q))
         {
-            StartCoroutine(LerpToPC1(pc1Pos.transform.position, lerpDuration));
+            Debug.Log("Starting LerpToPC1...");
+            StartCoroutine(LerpToPC1(transform.position, pc1Pos.transform.position, lerpDuration));
         }
-        
     }
 
-    IEnumerator LerpToPC2(Vector3 targetPos, float duration)
+    IEnumerator LerpToPC2(Vector3 startPos, Vector3 targetPos, float duration)
     {
         camFollow.enabled = false;
+        camFollow.isLerping = true;
         float time = 0;
-        Vector3 startPosition = transform.position;
 
         while (time < duration)
         {
-            transform.position = Vector3.Lerp(startPosition, targetPos, time / duration);
+            transform.position = Vector3.Lerp(startPos, targetPos, time / duration);
             time += Time.deltaTime;
+            Debug.Log($"Time: {time}, Lerp Factor: {time / duration}, Position: {transform.position}");
             yield return null;
         }
         transform.position = targetPos;
+        camFollow.isLerping = false;
         camFollow.enabled = true;
     }
 
-    IEnumerator LerpToPC1(Vector3 targetPos, float duration)
+    IEnumerator LerpToPC1(Vector3 startPos, Vector3 targetPos, float duration)
     {
         camFollow.enabled = false;
+        camFollow.isLerping = true;
         float time = 0;
-        Vector3 startPosition = transform.position;
 
         while (time < duration)
         {
-            transform.position = Vector3.Lerp(startPosition, targetPos, time / duration);
+            transform.position = Vector3.Lerp(startPos, targetPos, time / duration);
             time += Time.deltaTime;
+            Debug.Log($"Time: {time}, Lerp Factor: {time / duration}, Position: {transform.position}");
             yield return null;
         }
         transform.position = targetPos;
+        camFollow.isLerping = false;
         camFollow.enabled = true;
     }
 

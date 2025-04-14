@@ -8,6 +8,7 @@ public class InventoryItem : MonoBehaviour
     [SerializeField] private int quantity;
     [SerializeField] private Sprite sprite;
     [TextArea][SerializeField] private string itemDescription;
+    [SerializeField] private Vector3 itemScale;
 
     private PC1InventoryManager p1InventoryManager;
     private PC2InventoryManager p2InventoryManager;
@@ -17,36 +18,24 @@ public class InventoryItem : MonoBehaviour
     {
         p1InventoryManager = GameObject.FindGameObjectWithTag("Character1UI").GetComponent<PC1InventoryManager>();
         p2InventoryManager = GameObject.FindGameObjectWithTag("Character2UI").GetComponent<PC2InventoryManager>();
+        itemScale = gameObject.transform.localScale;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Character1")
+        if (collision.gameObject.tag == "Character1")
         {
-            int leftOverItems = p1InventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
+            p1InventoryManager.AddItem(itemName, quantity, sprite, itemDescription, itemScale);
             gameObject.GetComponent<Collider>().enabled = false;
-            if (leftOverItems <= 0)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                quantity = leftOverItems;
-            }
+            Destroy(gameObject);
         }
-        else if(collision.gameObject.tag == "Character2")
+        else if (collision.gameObject.tag == "Character2")
         {
-            int leftOverItems = p2InventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
+            p2InventoryManager.AddItem(itemName, quantity, sprite, itemDescription, itemScale);
             gameObject.GetComponent<Collider>().enabled = false;
-            if (leftOverItems <= 0)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                quantity = leftOverItems;
-            }
+            Destroy(gameObject);
         }
+    
     }
 
 
