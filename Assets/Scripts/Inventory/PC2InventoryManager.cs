@@ -6,17 +6,14 @@ public class PC2InventoryManager : MonoBehaviour
 {
     public GameObject pc2InventoryMenu;
     private bool menuActivated;
-    public bool p2Active;
     public CharacterSwitch cSwitch;
     public ItemSlot[] itemSlot;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!cSwitch.p1Active)
@@ -34,18 +31,16 @@ public class PC2InventoryManager : MonoBehaviour
                 menuActivated = true;
             }
         }
-
     }
 
-    public void AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription, Vector3 itemScale)
+    public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
     {
         for (int i = 0; i < itemSlot.Length; i++)
         {
             if (itemSlot[i].isFull == false)
             {
-                Debug.Log("itemName = " + itemName + " Quantity = " + quantity + " Sprite = " + itemSprite + " Item scale = " + itemScale);
-                itemSlot[i].AddItem(itemName, quantity, itemSprite, itemDescription, itemScale);
-                itemSlot[i].isFull = true;
+                Debug.Log("itemName = " + itemName + " Sprite = " + itemSprite);
+                itemSlot[i].AddItem(itemName, itemSprite, itemDescription, itemObject);
                 return;
             }
         }

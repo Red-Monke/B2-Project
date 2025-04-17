@@ -8,20 +8,20 @@ public class CharacterSwitch : MonoBehaviour
     [SerializeField] PC2InventoryManager p2InventoryMan;
     [SerializeField] GameObject playerCharacter1;
     [SerializeField] GameObject playerCharacter2;
-    PlayerMove p1Move;
-    PlayerMove p2Move;
+    PlayerController p1Controller;
+    PlayerController p2Controller;
     public bool p1Active;
 
     // Start is called before the first frame update
     void Start()
     {
-        p1Move = playerCharacter1.GetComponent<PlayerMove>();  
-        p2Move = playerCharacter2.GetComponent<PlayerMove>();
+        p1Controller = playerCharacter1.GetComponent<PlayerController>();
+        p2Controller = playerCharacter2.GetComponent<PlayerController>();
         
         p1Active = true;
         
-        p1Move.enabled = true;
-        p2Move.enabled = false;
+        p1Controller.enabled = true;
+        p2Controller.enabled = false;
     }
 
     // Update is called once per frame
@@ -42,19 +42,19 @@ public class CharacterSwitch : MonoBehaviour
 
     void SwitchToCharacter2()
     {
-        p1Move.enabled = false;
+        p1Controller.enabled = false;
         p1InventoryMan.enabled = false;
 
-        p2Move.enabled = true;
+        p2Controller.enabled = true;
         p2InventoryMan.enabled = true;
     }
 
     void SwitchToCharacter1()
     {
-        p1Move.enabled = true;
+        p1Controller.enabled = true;
         p1InventoryMan.enabled = true;
 
-        p2Move.enabled = false;
+        p2Controller.enabled = false;
         p2InventoryMan.enabled = false;
     }
 }

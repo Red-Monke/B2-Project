@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealPot : MonoBehaviour, IHealing, IUsableItem
+public class HealPot : MonoBehaviour, IHealing
 {
     public int healValue { get; set; }
     [SerializeField] int healMultiplier;
@@ -18,15 +18,5 @@ public class HealPot : MonoBehaviour, IHealing, IUsableItem
     {
         pLife = FindObjectOfType<PlayerLife>();
         healValue = baseHeal * healMultiplier;
-    }
-
-    public void ShareItem()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void UseItem()
-    {
-        OnHeal();
     }
 }

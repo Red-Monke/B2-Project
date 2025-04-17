@@ -6,11 +6,15 @@ public class PC1InventoryManager : MonoBehaviour
 {
     public GameObject pc1InventoryMenu;
     private bool menuActivated;
-    public bool p1Active;
     public CharacterSwitch cSwitch;
     public ItemSlot[] itemSlot;
 
-    // Update is called once per frame
+
+    private void Start()
+    {
+
+    }
+
     void Update()
     {
         if (cSwitch.p1Active)
@@ -28,18 +32,16 @@ public class PC1InventoryManager : MonoBehaviour
                 menuActivated = true;
             }
         }
-
     }
 
-    public void AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription, Vector3 itemScale)
+    public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
     {
         for(int i = 0; i < itemSlot.Length; i++)
         {
             if (itemSlot[i].isFull == false)
             {
-                Debug.Log("itemName = " + itemName + " Quantity = " + quantity + " Sprite = " + itemSprite + " Item scale = " + itemScale);
-                itemSlot[i].AddItem(itemName, quantity, itemSprite, itemDescription, itemScale);
-                itemSlot[i].isFull = true;
+                Debug.Log("itemName = " + itemName + " Sprite = " + itemSprite);
+                itemSlot[i].AddItem(itemName, itemSprite, itemDescription, itemObject);
                 return;
             }
         } 
@@ -53,5 +55,4 @@ public class PC1InventoryManager : MonoBehaviour
             itemSlot[i].thisItemSelected = false;
         }
     }
-
 }

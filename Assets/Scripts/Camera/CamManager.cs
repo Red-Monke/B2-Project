@@ -18,6 +18,8 @@ public class CamManager : MonoBehaviour
 
     void Update()
     {
+        transform.rotation = pc1Obj.transform.rotation;
+
         // Check for input to start lerp
         if (!isLerping && cSwitch.p1Active && Input.GetKeyDown(KeyCode.Q))
         {

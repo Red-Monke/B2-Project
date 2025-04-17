@@ -8,35 +8,38 @@ using TMPro;
 public class ItemSlot : MonoBehaviour, IPointerClickHandler
 {
     #region ITEM DATA
+    [Header("Item Data")]
     public string itemName;
-    public int itemQuantity;
     public Sprite itemSprite;
-    public bool isFull;
     public string itemDescription;
-    public Sprite emptySprite;
-    public Vector3 itemScale;
-
-    [SerializeField] int maxNumberOfItems;
+    public GameObject itemObject;
     #endregion
 
     #region ITEM SLOT
-    [SerializeField] private TMP_Text quantityText;
+    [Header("Item Slot")]
     [SerializeField] private Image itemImage;
+    public Sprite emptySprite;
+    public bool isFull;
     #endregion
 
     #region ITEM SELECTION
+    [Header("Item Selection")]
     public GameObject selectedShader;
     public bool thisItemSelected;
     #endregion
 
     #region ITEM DESCRIPTION SLOT
+    [Header("Item Description")]
     public Image itemDescriptionImage;
     public TMP_Text itemDescriptionNameText;
     public TMP_Text itemDescriptionText;
     #endregion
 
+    public Transform playerTransform;
+    [SerializeField] float distance;
     private PC1InventoryManager p1inventoryManager;
     private PC2InventoryManager p2inventoryManager;
+
 
     private void Start()
     {
@@ -45,28 +48,18 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         itemSprite = emptySprite;
     }
 
-    public void AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription, Vector3 itemScale)
+    public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
     {
-        //update name
         this.itemName = itemName;
-        
-        //update image
         this.itemSprite = itemSprite;
-        itemImage.sprite = itemSprite;
-
-        //update description
         this.itemDescription = itemDescription;
+        this.itemObject = itemObject;
 
-        //update item scale
-        this.itemScale = itemScale;
+        Debug.Log("slot update: item sprite = " + itemSprite);
 
-        //update quantity
-        this.itemQuantity = quantity;
+        isFull = true;
 
-        //update quatity text
-        quantityText.text = this.itemQuantity.ToString();
-        quantityText.enabled = true;
-
+        itemImage.sprite = itemSprite;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -87,18 +80,49 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         p1inventoryManager.DeselectAllSlots();
         p2inventoryManager.DeselectAllSlots();
         selectedShader.SetActive(true);
+
         thisItemSelected = true;
         itemDescriptionNameText.text = itemName;
         itemDescriptionText.text = itemDescription;
-        itemDescriptionImage.sprite = itemSprite;
-        if(itemDescriptionImage.sprite == null)
+        itemDescriptionImage.sprite = itemImage.sprite;
+
+        Debug.Log("item description updated: item sprite = " + itemSprite);
+        if(itemDescriptionImage == null)
         {
-            itemDescriptionImage.sprite = emptySprite;  
+            itemDescriptionImage.sprite = emptySprite;
+        }
+    }
+
+    public void EmptySlot()
+    {
+        //resets cached data in item slot object as well as item description objects
+        //resets boolean to allow for another item to use that slot 
+        itemImage.sprite = emptySprite;
+        itemObject = null;
+        itemDescriptionNameText.text = "";
+        itemDescriptionText.text = "";
+        itemName = "";
+        itemDescription = "";
+        itemDescriptionImage.sprite = emptySprite;
+
+        isFull = false;
+    }
+
+    void RespawnItem()
+    {
+        if (itemObject != null)
+        {
+            Vector3 spawnPos = playerTransform.position + playerTransform.forward * distance;
+            itemObject.GetComponent<InventoryItem>().collected = false;
+            itemObject.transform.position = spawnPos;
+            itemObject.SetActive(true);
         }
     }
 
     public void OnRightClick()
     {
-
+        RespawnItem();
+        EmptySlot();
     }
+
 }

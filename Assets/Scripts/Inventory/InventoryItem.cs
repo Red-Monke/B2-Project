@@ -4,39 +4,37 @@ using UnityEngine;
 
 public class InventoryItem : MonoBehaviour
 {
-    [SerializeField] private string itemName;
-    [SerializeField] private int quantity;
-    [SerializeField] private Sprite sprite;
-    [TextArea][SerializeField] private string itemDescription;
-    [SerializeField] private Vector3 itemScale;
+    public string itemName;
+    public Sprite sprite;
+    [TextArea]public string itemDescription;
+    public GameObject itemObject;
 
     private PC1InventoryManager p1InventoryManager;
     private PC2InventoryManager p2InventoryManager;
+    public bool collected;
 
     // Start is called before the first frame update
     void Start()
     {
         p1InventoryManager = GameObject.FindGameObjectWithTag("Character1UI").GetComponent<PC1InventoryManager>();
         p2InventoryManager = GameObject.FindGameObjectWithTag("Character2UI").GetComponent<PC2InventoryManager>();
-        itemScale = gameObject.transform.localScale;
+        collected = false;
+        itemObject = gameObject;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Character1")
+        if (collision.gameObject.tag == "Character1" && collected == false)
         {
-            p1InventoryManager.AddItem(itemName, quantity, sprite, itemDescription, itemScale);
-            gameObject.GetComponent<Collider>().enabled = false;
-            Destroy(gameObject);
+            collected = true;
+            p1InventoryManager.AddItem(itemName, sprite, itemDescription, itemObject);
+            gameObject.SetActive(false);
         }
-        else if (collision.gameObject.tag == "Character2")
+        else if (collision.gameObject.tag == "Character2" && collected == false)
         {
-            p2InventoryManager.AddItem(itemName, quantity, sprite, itemDescription, itemScale);
-            gameObject.GetComponent<Collider>().enabled = false;
-            Destroy(gameObject);
+            collected = true;
+            p2InventoryManager.AddItem(itemName, sprite, itemDescription, itemObject);
+            gameObject.SetActive(false);
         }
-    
     }
-
-
 }

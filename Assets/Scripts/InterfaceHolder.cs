@@ -38,11 +38,12 @@ public interface ICommand
     void Undo();
 }
 
-public interface IUsableItem
+public interface IItemActions
 {
     //use to throw or place item on ground
     public void ShareItem();
     public void UseItem();
+    public void PickUpItem();
 }
 
 public interface IBoostHealth
@@ -50,3 +51,8 @@ public interface IBoostHealth
     public void IncreaseMaxHealth(int boostAmount, int currentMaxHealth);
 }
 
+public interface IDoorActions
+{
+    public void OpenDoor();
+    public void CloseDoor();
+}

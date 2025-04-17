@@ -452,16 +452,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: 
-  itemQuantity: 0
   itemSprite: {fileID: 0}
-  isFull: 0
   itemDescription: 
-  emptySprite: {fileID: 21300000, guid: 59b9ffaff015c430b8bd282fe433b1cc, type: 3}
-  maxNumberOfItems: 5
-  quantityText: {fileID: 2806416144513235043}
+  itemObject: {fileID: 0}
   itemImage: {fileID: 6841468376292550592}
+  emptySprite: {fileID: 21300000, guid: 59b9ffaff015c430b8bd282fe433b1cc, type: 3}
+  isFull: 0
   selectedShader: {fileID: 2365490167695098302}
   thisItemSelected: 0
   itemDescriptionImage: {fileID: 0}
   itemDescriptionNameText: {fileID: 0}
   itemDescriptionText: {fileID: 0}
+  playerTransform: {fileID: 0}
+  distance: 2
