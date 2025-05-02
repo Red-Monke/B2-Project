@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8704763897070699656}
   - component: {fileID: 2603002123731378986}
   - component: {fileID: 8251887526549336608}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,9 +118,8 @@ GameObject:
   - component: {fileID: 8052405977384342542}
   - component: {fileID: 5720490152925095179}
   - component: {fileID: 4806326695525725526}
-  - component: {fileID: 4291143041399575294}
   - component: {fileID: 6528361922268422059}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerCharacter2
   m_TagString: Character2
   m_Icon: {fileID: 0}
@@ -242,18 +241,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &4291143041399575294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1905279162450322508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5c2ac3db90328a419089843931bc3d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6528361922268422059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,22 +256,20 @@ MonoBehaviour:
   pb: {fileID: 4806326695525725526}
   coll: {fileID: 5720490152925095179}
   pauseUI: {fileID: 0}
+  p1Inventory: {fileID: 0}
+  arrayIndex: 0
+  itemObject: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  itemLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  doorLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  transporterLayer:
-    serializedVersion: 2
-    m_Bits: 128
   moveSpeed: 5
   rotationSpeed: 1
-  jumpForce: 10
+  jumpForce: 50
   raycastDistance: 1
+  interactDistance: 3
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &8354262440666608074
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +279,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 450209654810519454}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LerpTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}

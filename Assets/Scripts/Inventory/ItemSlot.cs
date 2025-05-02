@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using TMPro;
+using TransportingObject;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour, IPointerClickHandler
 {
@@ -20,6 +19,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image itemImage;
     public Sprite emptySprite;
     public bool isFull;
+    public int thisIndex;
     #endregion
 
     #region ITEM SELECTION
@@ -35,17 +35,27 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     public TMP_Text itemDescriptionText;
     #endregion
 
-    public Transform playerTransform;
-    [SerializeField] float distance;
+    #region ITEM TRANSPORTATION
+    private GameObject playerObj;
+    public GameObject p1Obj;
+    public GameObject p2Obj;
+    CharacterSwitch cSwitch;
+    [SerializeField] float respawnDistance;
+    public float raycastDistance;
+    #endregion
+
     private PC1InventoryManager p1inventoryManager;
     private PC2InventoryManager p2inventoryManager;
 
+    public void GetIndex(int index) { thisIndex = index; }
 
     private void Start()
     {
         p1inventoryManager = GameObject.FindGameObjectWithTag("Character1UI").GetComponent<PC1InventoryManager>();
         p2inventoryManager = GameObject.FindGameObjectWithTag("Character2UI").GetComponent<PC2InventoryManager>();
+        cSwitch = FindObjectOfType<CharacterSwitch>();
         itemSprite = emptySprite;
+        
     }
 
     public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
@@ -77,22 +87,106 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
 
     public void OnLeftClick()
     {
-        p1inventoryManager.DeselectAllSlots();
-        p2inventoryManager.DeselectAllSlots();
-        selectedShader.SetActive(true);
+        if(p1inventoryManager.currentItemIndex != thisIndex) { p1inventoryManager.DeselectAllSlots(); SelectedSlot(); p1inventoryManager.currentItemIndex = thisIndex; }
+        if(p2inventoryManager.currentItemIndex != thisIndex) { p2inventoryManager.DeselectAllSlots(); SelectedSlot(); p2inventoryManager.currentItemIndex = thisIndex; }
 
-        thisItemSelected = true;
-        itemDescriptionNameText.text = itemName;
-        itemDescriptionText.text = itemDescription;
-        itemDescriptionImage.sprite = itemImage.sprite;
+        if(p1inventoryManager.currentItemIndex == thisIndex) { p1inventoryManager.DeselectAllSlots(); SelectedSlot(); p1inventoryManager.currentItemIndex = thisIndex; }
+        if(p2inventoryManager.currentItemIndex == thisIndex) { p2inventoryManager.DeselectAllSlots(); SelectedSlot(); p2inventoryManager.currentItemIndex = thisIndex; }
 
-        Debug.Log("item description updated: item sprite = " + itemSprite);
-        if(itemDescriptionImage == null)
+        if (itemDescriptionImage == null)
         {
             itemDescriptionImage.sprite = emptySprite;
         }
     }
 
+    public void OnRightClick()
+    {
+        PlayerController p1Control = GameObject.FindGameObjectWithTag("Character1").GetComponent<PlayerController>();
+        PlayerController p2Control = GameObject.FindGameObjectWithTag("Character2").GetComponent<PlayerController>();
+
+        TransportPlatform platform1 = p1Control.DetectNearbyPlatform();
+        TransportPlatform platform2 = p2Control.DetectNearbyPlatform();
+
+        #region CHARACTER 1 RMC ACTIONS
+        if (cSwitch.p1Active)
+        {
+            if (platform1 != null)
+            {
+                // Place item onto platform if nearby
+                platform1.recentTransfer = false;
+                platform1.isOccupied = false;
+                platform1.PlaceItem(itemObject);
+                Debug.Log($"Placed '{itemObject.name}' onto platform: {platform1.gameObject.name}");
+            }
+            else
+            {
+                // Drop item in front of player
+                Vector3 dropPosition = playerObj.transform.position + playerObj.transform.forward * respawnDistance;
+                itemObject.transform.position = dropPosition;
+                itemObject.SetActive(true);
+                Debug.Log($"Dropped '{itemObject.name}' in front of player.");
+            }
+        }
+
+        #endregion
+
+        #region CHARACTER 2 RMC ACTIONS
+        if (!cSwitch.p1Active)
+        {
+            if (platform2 != null)
+            {
+                // Place item onto platform if nearby
+                platform2.recentTransfer = false;
+                platform2.isOccupied = false;
+                platform2.PlaceItem(itemObject);
+                Debug.Log($"Placed '{itemObject.name}' onto platform: {platform2.gameObject.name}");
+            }
+            else
+            {
+                // Drop item in front of player
+                Vector3 dropPosition = playerObj.transform.position + playerObj.transform.forward * respawnDistance;
+                itemObject.transform.position = dropPosition;
+                itemObject.SetActive(true);
+                Debug.Log($"Dropped '{itemObject.name}' in front of player.");
+            }
+        }
+        #endregion
+        EmptySlot();
+    }
+
+    public void Update()
+    {
+        ActiveCharacterDetermination();
+    }
+
+    void ActiveCharacterDetermination()
+    {
+        if (cSwitch.p1Active) { playerObj = p1Obj; } else { playerObj = p2Obj; }
+    }
+
+    #region SLOT SELECTION/DESELECTION
+    public void SelectedSlot()
+    {
+        thisItemSelected = true;
+        selectedShader.SetActive(true);
+        itemDescriptionNameText.text = itemName;
+        itemDescriptionText.text = itemDescription;
+        itemDescriptionImage.sprite = itemImage.sprite;
+
+        if (itemDescriptionImage == null)
+        {
+            itemDescriptionImage.sprite = emptySprite;
+        }
+
+        Debug.Log("item description updated: item sprite = " + itemSprite);
+    }
+
+    public void DeselectSlot()
+    {
+        thisItemSelected = false;
+        selectedShader.SetActive(false);
+    }
+    #endregion
     public void EmptySlot()
     {
         //resets cached data in item slot object as well as item description objects
@@ -106,23 +200,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         itemDescriptionImage.sprite = emptySprite;
 
         isFull = false;
-    }
-
-    void RespawnItem()
-    {
-        if (itemObject != null)
-        {
-            Vector3 spawnPos = playerTransform.position + playerTransform.forward * distance;
-            itemObject.GetComponent<InventoryItem>().collected = false;
-            itemObject.transform.position = spawnPos;
-            itemObject.SetActive(true);
-        }
-    }
-
-    public void OnRightClick()
-    {
-        RespawnItem();
-        EmptySlot();
     }
 
 }

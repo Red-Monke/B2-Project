@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TransportingObject;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -10,10 +11,12 @@ public class PlayerController : MonoBehaviour
     public Rigidbody pb;
     public BoxCollider coll;
     public GameObject pauseUI;
+    public PC1InventoryManager p1Inventory;
+    public PC2InventoryManager p2Inventory;
+    public CharacterSwitch cSwitch;
+    public GameObject p1ItemObject;
+    public GameObject p2ItemObject;
     public LayerMask groundLayer;
-    public LayerMask itemLayer;
-    public LayerMask doorLayer;
-    public LayerMask transporterLayer;
     #endregion
 
     #region MOVEMENT VARIABLES
@@ -27,10 +30,15 @@ public class PlayerController : MonoBehaviour
     public float raycastDistance;
     #endregion
 
-    void Start()
-    {
-        
-    }
+    #region INTERACTION VARIABLES
+    [Header("Interaction Variables")]
+    public float interactDistance;
+    public LayerMask interactableLayer;
+    public bool itemTransfered = false;
+    int p1ArrayIndex;
+    int p2ArrayIndex;
+    #endregion
+
 
     void Update()
     {
@@ -38,6 +46,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Interact")) { Interact(); }
         if (Input.GetMouseButtonDown(0)) { Fire(); }
         if (Input.GetButtonDown("Pause")) { Pause(); }
+        p1ArrayIndex = p1Inventory.currentItemIndex;
+        p2ArrayIndex = p2Inventory.currentItemIndex;
+        p1ItemObject = p1Inventory.itemSlot[p1ArrayIndex].itemObject;
+        p2ItemObject = p2Inventory.itemSlot[p2ArrayIndex].itemObject;
     }
 
     private void Pause()
@@ -95,6 +107,112 @@ public class PlayerController : MonoBehaviour
 
     public void Interact()
     {
+        List<GameObject> detectedObjects = DetectObjects();
+
+        foreach (GameObject detectedObject in detectedObjects)
+        {
+            Debug.Log($"Detected object: {detectedObject.name} (Tag: {detectedObject.tag})");
+
+            // Collect items
+            if (detectedObject.CompareTag("Item"))
+            {
+                InventoryItem item = detectedObject.GetComponent<InventoryItem>();
+                if (item != null)
+                {
+                    item.ItemCollection();
+                    Debug.Log($"Collected item: {detectedObject.name}");
+                }
+                
+            }
+
+            // Place items on platforms & transfer after 2s delay
+            else if (detectedObject.CompareTag("Platform"))
+            {
+                TransportPlatform platform = detectedObject.GetComponent<TransportPlatform>();
+                if (platform != null && p1ItemObject != null)
+                {
+                    platform.recentTransfer = false;
+                    platform.PlaceItem(p1ItemObject);
+                    p1Inventory.itemSlot[p1ArrayIndex].EmptySlot();
+                    p1ItemObject = null;
+                    // Clear item selection
+                    Debug.Log($"Placed item onto platform: {detectedObject.name}");
+                }
+                else if (platform.isOccupied) { p1ItemObject = platform.RemoveItem(); }
+                
+                if(platform != null && p2ItemObject != null)
+                {
+                    platform.recentTransfer = false;
+                    platform.PlaceItem(p2ItemObject);
+                    p2Inventory.itemSlot[p2ArrayIndex].EmptySlot();
+                    p2ItemObject = null;
+                    // Clear item selection
+                    Debug.Log($"Placed item onto platform: {detectedObject.name}");
+                }
+                else if (platform.isOccupied) { p2ItemObject = platform.RemoveItem(); }
+            }
+
+            // Open doors
+            else if (detectedObject.CompareTag("Door"))
+            {
+                Door door = detectedObject.GetComponent<Door>();
+                if (door != null)
+                {
+                    door.OpenDoor();
+                    Debug.Log($"Opened door: {detectedObject.name}");
+                }
+            }
+        }
+
         Debug.Log("E pressed, interaction attempted");
     }
+
+
+    private List<GameObject> DetectObjects()
+    {
+        Vector3 boxCenter = gameObject.GetComponent<Collider>().bounds.center; // Center of detection
+        Vector3 boxHalfExtents = new Vector3(1f, 1f, 1f);
+        Vector3 boxDirection = transform.forward;
+
+        RaycastHit[] detectedHits = Physics.BoxCastAll(boxCenter, boxHalfExtents, boxDirection, Quaternion.identity, interactDistance, interactableLayer);
+
+        List<GameObject> detectedObjects = new List<GameObject>();
+
+        foreach (RaycastHit hit in detectedHits)
+        {
+            detectedObjects.Add(hit.collider.gameObject); // Store detected objects
+        }
+
+        return detectedObjects;
+    }
+
+    public TransportPlatform DetectNearbyPlatform()
+    {
+        Vector3 boxCenter = gameObject.GetComponent<Collider>().bounds.center; // Center of detection
+        Vector3 boxHalfExtents = new Vector3(1f, 1f, 1f); // Box size for scanning
+        Vector3 boxDirection = transform.forward; // Forward direction for BoxCast
+
+        RaycastHit[] hits = Physics.BoxCastAll(boxCenter, boxHalfExtents, boxDirection, Quaternion.identity, interactDistance, interactableLayer);
+
+        TransportPlatform closestPlatform = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.CompareTag("Platform"))
+            {
+                float distance = Vector3.Distance(transform.position, hit.collider.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestPlatform = hit.collider.GetComponent<TransportPlatform>();
+                }
+            }
+        }
+
+        return closestPlatform; // Returns nearest platform, or null if none are found
+    }
+
+
+
 }

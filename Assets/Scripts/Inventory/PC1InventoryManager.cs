@@ -1,18 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using TransportingObject;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PC1InventoryManager : MonoBehaviour
 {
-    public GameObject pc1InventoryMenu;
+    public GameObject pc1InventoryDescription;
+    PlayerController p1Control;
     private bool menuActivated;
     public CharacterSwitch cSwitch;
     public ItemSlot[] itemSlot;
-
+    public int currentItemIndex;
 
     private void Start()
     {
+        itemSlot[0].SelectedSlot();
 
+        for(int i = 0; i < itemSlot.Length; i++)
+        {
+            ItemSlot itemSlots = itemSlot[i].GetComponent<ItemSlot>();
+            if(itemSlots != null)
+            {
+                itemSlots.GetIndex(i);
+            }
+        }
+
+        p1Control = GameObject.FindGameObjectWithTag("Character1").GetComponent<PlayerController>();
     }
 
     void Update()
@@ -21,17 +35,57 @@ public class PC1InventoryManager : MonoBehaviour
         {
             if (Input.GetButtonDown("Inventory") && menuActivated)
             {
-                Time.timeScale = 1;
-                pc1InventoryMenu.SetActive(false);
+                pc1InventoryDescription.SetActive(false);
                 menuActivated = false;
             }
             else if (Input.GetButtonDown("Inventory") && !menuActivated)
             {
-                Time.timeScale = 0;
-                pc1InventoryMenu.SetActive(true);
+                pc1InventoryDescription.SetActive(true);
                 menuActivated = true;
             }
+
+            ItemSelection();
         }
+
+        
+    }
+
+    void ItemSelection()
+    {
+        #region ARROW KEYS CONTROL
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (currentItemIndex >= itemSlot.Length -1)
+            {
+                DeselectAllSlots();
+                currentItemIndex = 0;
+                itemSlot[currentItemIndex].SelectedSlot();
+            }
+            else
+            {
+                DeselectAllSlots();
+                currentItemIndex++;
+                itemSlot[currentItemIndex].SelectedSlot();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (currentItemIndex == 0)
+            {
+                DeselectAllSlots();
+                currentItemIndex = itemSlot.Length -1;
+                itemSlot[currentItemIndex].SelectedSlot();
+            }
+            else
+            {
+                DeselectAllSlots();
+                currentItemIndex--;
+                itemSlot[currentItemIndex].SelectedSlot();
+            }
+        }
+        #endregion
+
     }
 
     public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
@@ -51,8 +105,7 @@ public class PC1InventoryManager : MonoBehaviour
     {
         for(int i = 0; i < itemSlot.Length; i++)
         {
-            itemSlot[i].selectedShader.SetActive(false);
-            itemSlot[i].thisItemSelected = false;
+            itemSlot[i].DeselectSlot();
         }
     }
 }

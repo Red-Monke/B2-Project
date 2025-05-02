@@ -9,6 +9,8 @@ TagManager:
   - Character2
   - Character1UI
   - Character2UI
+  - Platform
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -19,8 +21,8 @@ TagManager:
   - Item
   - Transport
   - Door
-  - 
-  - 
+  - Interactable
+  - Player
   - 
   - 
   - 

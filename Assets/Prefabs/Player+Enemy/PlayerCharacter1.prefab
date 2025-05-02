@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 5672684427222365026}
   - component: {fileID: 3776865231282512144}
   - component: {fileID: 5675096287668249880}
-  - component: {fileID: 7763940965515838758}
   - component: {fileID: 2388367872292513087}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerCharacter1
   m_TagString: Character1
   m_Icon: {fileID: 0}
@@ -137,18 +136,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &7763940965515838758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4242039674323235608}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5c2ac3db90328a419089843931bc3d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2388367872292513087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,22 +151,20 @@ MonoBehaviour:
   pb: {fileID: 5675096287668249880}
   coll: {fileID: 3776865231282512144}
   pauseUI: {fileID: 0}
+  p1Inventory: {fileID: 0}
+  arrayIndex: 0
+  itemObject: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  itemLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  doorLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  transporterLayer:
-    serializedVersion: 2
-    m_Bits: 0
   moveSpeed: 5
-  rotationSpeed: 1
+  rotationSpeed: 2
   jumpForce: 50
   raycastDistance: 1
+  interactDistance: 2
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &4685272329124714675
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,7 +177,7 @@ GameObject:
   - component: {fileID: 4617104183108108539}
   - component: {fileID: 9090346809249720020}
   - component: {fileID: 8888962433099497844}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +279,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1053343788301492638}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LerpTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}

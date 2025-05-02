@@ -6,13 +6,14 @@ public class Door : MonoBehaviour, IDoorActions
 {
     #region DOOR DATA
     public DoorColour doorColour = new DoorColour();
-    public OppositeColour oppositeColour = new OppositeColour();
+
+    
     #endregion
-    KeyItem keyItem;
+
 
     private void Start()
     {
-        keyItem = FindObjectOfType<KeyItem>();
+
     }
 
     public void OpenDoor()
@@ -34,13 +35,5 @@ public class Door : MonoBehaviour, IDoorActions
         White
     }
 
-    public enum OppositeColour
-    {
-        Red,
-        Green,
-        Blue,
-        Black,
-        White
-    }
 }
 

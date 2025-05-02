@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 5346499555628584346}
   - component: {fileID: 7115032333831561389}
   - component: {fileID: 1128905475436194323}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: smallHealPot
-  m_TagString: HealPot
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,10 +162,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Small Heal Pot
-  quantity: 1
   sprite: {fileID: 21300000, guid: 4617574d60c9cd5458ef8ae85f876844, type: 3}
   itemDescription: 'Took a beating? Feeling rough? Not for long! Here, have a big
     pot to sooth those wounds.
 
 
     Restores 10 HP'
+  itemObject: {fileID: 0}
+  collected: 0
