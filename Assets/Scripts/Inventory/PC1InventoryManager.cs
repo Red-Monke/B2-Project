@@ -89,8 +89,8 @@ public class PC1InventoryManager : MonoBehaviour
     }
 
     public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
-    {
-        for(int i = 0; i < itemSlot.Length; i++)
+    { 
+        for (int i = 0; i < itemSlot.Length; i++)
         {
             if (itemSlot[i].isFull == false)
             {
@@ -98,7 +98,7 @@ public class PC1InventoryManager : MonoBehaviour
                 itemSlot[i].AddItem(itemName, itemSprite, itemDescription, itemObject);
                 return;
             }
-        } 
+        }
     }
 
     public void DeselectAllSlots()

@@ -113,8 +113,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             if (platform1 != null)
             {
                 // Place item onto platform if nearby
-                platform1.recentTransfer = false;
-                platform1.isOccupied = false;
                 platform1.PlaceItem(itemObject);
                 Debug.Log($"Placed '{itemObject.name}' onto platform: {platform1.gameObject.name}");
             }
@@ -136,8 +134,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             if (platform2 != null)
             {
                 // Place item onto platform if nearby
-                platform2.recentTransfer = false;
-                platform2.isOccupied = false;
                 platform2.PlaceItem(itemObject);
                 Debug.Log($"Placed '{itemObject.name}' onto platform: {platform2.gameObject.name}");
             }

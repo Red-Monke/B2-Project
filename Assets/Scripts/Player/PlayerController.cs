@@ -116,13 +116,39 @@ public class PlayerController : MonoBehaviour
             // Collect items
             if (detectedObject.CompareTag("Item"))
             {
-                InventoryItem item = detectedObject.GetComponent<InventoryItem>();
-                if (item != null)
+                if (cSwitch.p1Active)
                 {
-                    item.ItemCollection();
-                    Debug.Log($"Collected item: {detectedObject.name}");
+                    if(p1Inventory.itemSlot[p1Inventory.itemSlot.Length - 1].isFull == false)
+                    {
+                        InventoryItem item = detectedObject.GetComponent<InventoryItem>();
+                        if (item != null)
+                        {
+                            item.ItemCollection();
+                            Debug.Log($"Collected item: {detectedObject.name}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("can not collect item, inventory is full");
+                    }
                 }
-                
+                else if (!cSwitch.p1Active)
+                {
+                    if (p2Inventory.itemSlot[p2Inventory.itemSlot.Length - 1].isFull == false)
+                    {
+                        InventoryItem item = detectedObject.GetComponent<InventoryItem>();
+                        if (item != null)
+                        {
+                            item.ItemCollection();
+                            Debug.Log($"Collected item: {detectedObject.name}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("can not collect item, inventory is full");
+                    }
+                }
+
             }
 
             // Place items on platforms & transfer after 2s delay
@@ -131,25 +157,25 @@ public class PlayerController : MonoBehaviour
                 TransportPlatform platform = detectedObject.GetComponent<TransportPlatform>();
                 if (platform != null && p1ItemObject != null)
                 {
-                    platform.recentTransfer = false;
+                    //clear item from character inventory and place item on platform
                     platform.PlaceItem(p1ItemObject);
                     p1Inventory.itemSlot[p1ArrayIndex].EmptySlot();
                     p1ItemObject = null;
-                    // Clear item selection
+                    
                     Debug.Log($"Placed item onto platform: {detectedObject.name}");
                 }
-                else if (platform.isOccupied) { p1ItemObject = platform.RemoveItem(); }
+                else if (platform.waitingForPlayer && platform.isOccupied) { p1ItemObject = platform.RemoveItem(); }
                 
                 if(platform != null && p2ItemObject != null)
                 {
-                    platform.recentTransfer = false;
+                    //clear item from character inventory and place item on platform
                     platform.PlaceItem(p2ItemObject);
                     p2Inventory.itemSlot[p2ArrayIndex].EmptySlot();
                     p2ItemObject = null;
-                    // Clear item selection
+                  
                     Debug.Log($"Placed item onto platform: {detectedObject.name}");
                 }
-                else if (platform.isOccupied) { p2ItemObject = platform.RemoveItem(); }
+                else if (platform.waitingForPlayer && platform.isOccupied) { p2ItemObject = platform.RemoveItem(); }
             }
 
             // Open doors

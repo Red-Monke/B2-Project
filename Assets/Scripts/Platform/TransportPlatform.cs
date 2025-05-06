@@ -11,36 +11,57 @@ namespace TransportingObject
         public float waitTime;
         [SerializeField] private GameObject currentItem;
         public bool isOccupied = false;
-        public bool recentTransfer = true;
+        public bool waitingForPlayer = false;
 
-
-        private void Update()
-        {
-            if(currentItem == null && isOccupied) { ResetPlatform(); }
-        }
         public void PlaceItem(GameObject item)
         {
-            if (item != null && !isOccupied)
+            if (item != null && !isOccupied && !waitingForPlayer)
+            {
+                currentItem = item;
+                item.SetActive(true);
+                item.transform.position = itemArea.position; // Move item onto this platform
+                
+                isOccupied = true;
+                
+                Debug.Log($"Item '{item.name}' placed on {gameObject.name}");
+                
+                if (!waitingForPlayer && isOccupied) { StartCoroutine(MoveItemAfterDelay()); } //if occupied and not waiting for player to pick up item, transfer item to next platform
+            }
+
+            if (waitingForPlayer && !isOccupied)
             {
                 currentItem = item;
                 item.SetActive(true);
                 item.transform.position = itemArea.position; // Move item onto this platform
                 isOccupied = true;
-                Debug.Log($"Item '{item.name}' placed on {gameObject.name}");
-                if (!recentTransfer && isOccupied) { StartCoroutine(MoveItemAfterDelay()); }
-                
+                Debug.Log("waiting for player to pick up item at: " + gameObject.name);
             }
+
         }
 
         private IEnumerator MoveItemAfterDelay()
         {
             yield return new WaitForSeconds(waitTime); // Wait before moving to next platform
-
-            if (nextPlatform != null && currentItem != null && nextPlatform != this)
+           
+            if (nextPlatform.isOccupied)
             {
-                nextPlatform.recentTransfer = true;
+                while (nextPlatform.isOccupied)
+                {
+                    Debug.Log($"Waiting for {nextPlatform.gameObject.name} to become available...");
+                    yield return new WaitForSeconds(0.5f);
+                }
+            }
+            
+            if (nextPlatform != null && currentItem != null && nextPlatform != this && !nextPlatform.isOccupied)
+            {
+                nextPlatform.waitingForPlayer = true;
                 nextPlatform.PlaceItem(currentItem); // Move item to the next platform
+                ResetPlatform(); //reset platform to default state after item transfer
                 Debug.Log($"Item moved from {gameObject.name} to {nextPlatform.gameObject.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"Transfer failed: Next platform is null or item is missing.");
             }
         }
         
@@ -48,6 +69,7 @@ namespace TransportingObject
         {
             currentItem = null;
             isOccupied = false;
+            waitingForPlayer = false;
             Debug.Log($"{gameObject.name} is ready for a new item.");
         }
 
@@ -56,9 +78,7 @@ namespace TransportingObject
             if (currentItem != null)
             {
                 GameObject itemToReturn = currentItem;
-                currentItem = null; 
-                isOccupied = false;  
-                recentTransfer = false;  
+                ResetPlatform(); 
                 Debug.Log($"Item '{itemToReturn.name}' removed from platform {gameObject.name}");
                 return itemToReturn;
             }
