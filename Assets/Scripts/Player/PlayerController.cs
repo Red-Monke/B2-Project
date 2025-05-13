@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody pb;
     public BoxCollider coll;
     public GameObject pauseUI;
+    public GameObject p1InventoryUI;
+    public GameObject p2InventoryUI;
     public PC1InventoryManager p1Inventory;
     public PC2InventoryManager p2Inventory;
     public CharacterSwitch cSwitch;
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
     public bool itemTransfered = false;
     int p1ArrayIndex;
     int p2ArrayIndex;
+    bool gameIsPaused = false;
     #endregion
 
 
@@ -50,10 +53,43 @@ public class PlayerController : MonoBehaviour
         p2ArrayIndex = p2Inventory.currentItemIndex;
         p1ItemObject = p1Inventory.itemSlot[p1ArrayIndex].itemObject;
         p2ItemObject = p2Inventory.itemSlot[p2ArrayIndex].itemObject;
+
+        if (gameIsPaused) { Time.timeScale = 0; } else { Time.timeScale = 1; }
     }
 
     private void Pause()
     {
+        if (cSwitch.p1Active)
+        {
+            if (!gameIsPaused)
+            {
+                pauseUI.SetActive(true);
+                p1InventoryUI.SetActive(false);
+                gameIsPaused = true;
+            }
+            else
+            {
+                pauseUI.SetActive(false);
+                p1InventoryUI.SetActive(true);
+                gameIsPaused = false;
+            }
+        }
+        else if (!cSwitch.p1Active)
+        {
+            if (!gameIsPaused)
+            {
+                pauseUI.SetActive(true);
+                p2InventoryUI.SetActive(false);
+                gameIsPaused = true;
+            }
+            else
+            {
+                pauseUI.SetActive(false);
+                p2InventoryUI.SetActive(true);
+                gameIsPaused = false;
+            }
+        }
+
         Debug.Log("Pause pressed");
     }
 
@@ -78,9 +114,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump()
     {
-        if (IsGrounded()) { return; }
         pb.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
-        Debug.Log("space pressed, jump attempted");
     }
     private void RotatePlayer()
     {
@@ -96,7 +130,7 @@ public class PlayerController : MonoBehaviour
     }
     public bool IsGrounded()
     {
-        return Physics.BoxCast(coll.bounds.center, coll.bounds.size, Vector3.down, transform.rotation, raycastDistance, groundLayer);
+        return Physics.Raycast(coll.bounds.center, Vector3.down, raycastDistance, groundLayer);
     }
     #endregion
 
@@ -234,6 +268,8 @@ public class PlayerController : MonoBehaviour
                     {
                         Debug.LogWarning($"Key '{keyItem.keyColourOpen}' does not match door '{door.thisDoorColour}'.");
                     }
+
+                    if(keyItem == null) { Debug.LogWarning("No key available in " + p1Inventory.itemSlot[p1ArrayIndex]); }
                 }
                 else if (!cSwitch.p1Active)
                 {
@@ -263,6 +299,8 @@ public class PlayerController : MonoBehaviour
                     {
                         Debug.LogWarning($"Key '{keyItem.keyColourOpen}' does not match door '{door.thisDoorColour}'.");
                     }
+
+                    if (keyItem == null) { Debug.LogWarning("No key available in " + p2Inventory.itemSlot[p2ArrayIndex]); }
                 }
             }
             #endregion

@@ -5,6 +5,7 @@ using UnityEngine;
 public class GoalManager : MonoBehaviour
 {
     public GameObject pairedGoalBox;
+    public PauseAndEndGameUI pauseAndEndUI;
     GoalManager pairedGM;
     CharacterSwitch cSwitch;
     public bool thisGoalReached = false;
@@ -34,7 +35,6 @@ public class GoalManager : MonoBehaviour
                 LevelCompletionDetection();
             }
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -53,7 +53,6 @@ public class GoalManager : MonoBehaviour
                 thisGoalReached = false;
             }
         }
-
     }
 
     public void LevelCompletionDetection()
@@ -63,8 +62,7 @@ public class GoalManager : MonoBehaviour
             levelComplete = true;
         }
 
-        if (levelComplete) { Debug.LogWarning("level Complete, insert game progression behaviour here"); }
-
+        if (levelComplete) { pauseAndEndUI.NextLevel(); Debug.LogWarning("level Complete, insert game progression behaviour here"); }
     }
 
 }
