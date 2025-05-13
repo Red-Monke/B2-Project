@@ -54,7 +54,7 @@ public class ThirdPersonCamera : MonoBehaviour
             isRotating = false; // Set flag to false when button is released
         }
 
-        // Continue updating rotation smoothly
+        // Continue updating rotation 
         Vector3 nextRot = new Vector3(rotX, rotY);
         currentRot = Vector3.SmoothDamp(currentRot, nextRot, ref smoothVelocity, smoothTime);
 

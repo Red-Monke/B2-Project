@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TransportingObject;
+using DoorOperations;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -44,7 +45,6 @@ public class PlayerController : MonoBehaviour
     {
         PlayerMovement();
         if (Input.GetButtonDown("Interact")) { Interact(); }
-        if (Input.GetMouseButtonDown(0)) { Fire(); }
         if (Input.GetButtonDown("Pause")) { Pause(); }
         p1ArrayIndex = p1Inventory.currentItemIndex;
         p2ArrayIndex = p2Inventory.currentItemIndex;
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
     #region PLAYER MOVEMENT
     private void PlayerMovement()
     {
-        if (Input.GetButton("Vertical"))
+        if (Input.GetButton("Vertical") && !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)))
         {
             MoveForward();
         }
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetButton("Horizontal"))
+        if (Input.GetButton("Horizontal") && !(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)))
         {
             RotatePlayer();
         }
@@ -100,11 +100,6 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void Fire()
-    {
-        Debug.Log("LMC clicked, fire attempted");
-    }
-
     public void Interact()
     {
         List<GameObject> detectedObjects = DetectObjects();
@@ -112,7 +107,7 @@ public class PlayerController : MonoBehaviour
         foreach (GameObject detectedObject in detectedObjects)
         {
             Debug.Log($"Detected object: {detectedObject.name} (Tag: {detectedObject.tag})");
-
+            #region ITEM INTERACTION    
             // Collect items
             if (detectedObject.CompareTag("Item"))
             {
@@ -125,6 +120,7 @@ public class PlayerController : MonoBehaviour
                         {
                             item.ItemCollection();
                             Debug.Log($"Collected item: {detectedObject.name}");
+                            break;
                         }
                     }
                     else
@@ -141,6 +137,7 @@ public class PlayerController : MonoBehaviour
                         {
                             item.ItemCollection();
                             Debug.Log($"Collected item: {detectedObject.name}");
+                            break;
                         }
                     }
                     else
@@ -150,50 +147,131 @@ public class PlayerController : MonoBehaviour
                 }
 
             }
-
+            #endregion
+            #region PLATFORM INTERACTION
             // Place items on platforms & transfer after 2s delay
             else if (detectedObject.CompareTag("Platform"))
             {
                 TransportPlatform platform = detectedObject.GetComponent<TransportPlatform>();
-                if (platform != null && p1ItemObject != null)
+                if (cSwitch.p1Active)
                 {
-                    //clear item from character inventory and place item on platform
-                    platform.PlaceItem(p1ItemObject);
-                    p1Inventory.itemSlot[p1ArrayIndex].EmptySlot();
-                    p1ItemObject = null;
-                    
-                    Debug.Log($"Placed item onto platform: {detectedObject.name}");
-                }
-                else if (platform.waitingForPlayer && platform.isOccupied) { p1ItemObject = platform.RemoveItem(); }
-                
-                if(platform != null && p2ItemObject != null)
-                {
-                    //clear item from character inventory and place item on platform
-                    platform.PlaceItem(p2ItemObject);
-                    p2Inventory.itemSlot[p2ArrayIndex].EmptySlot();
-                    p2ItemObject = null;
-                  
-                    Debug.Log($"Placed item onto platform: {detectedObject.name}");
-                }
-                else if (platform.waitingForPlayer && platform.isOccupied) { p2ItemObject = platform.RemoveItem(); }
-            }
+                    if (platform != null && platform.isOccupied)
+                    {
+                        Debug.Log($"Interacting with occupied platform: {platform.gameObject.name}");
 
+                        platform.ReturnItem();
+                        break;
+                    }
+                    else if (platform != null && p1ItemObject != null && !platform.isOccupied)
+                    {
+                        //clear item from character inventory and place item on platform
+                        platform.PlaceItem(p1ItemObject);
+                        p1Inventory.itemSlot[p1ArrayIndex].EmptySlot();
+                        p1ItemObject = null;
+
+                        Debug.Log($"Placed item onto platform: {detectedObject.name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("can not place item on to platform");
+                    }
+                }
+                else if (!cSwitch.p1Active)
+                {
+                    if (platform != null && platform.isOccupied)
+                    {
+                        Debug.Log($"Interacting with occupied platform: {platform.gameObject.name}");
+
+                        platform.ReturnItem();
+                        break;
+                    }
+                    else if (platform != null && p2ItemObject != null && !platform.isOccupied)
+                    {
+                        //clear item from character inventory and place item on platform
+                        platform.PlaceItem(p2ItemObject);
+                        p2Inventory.itemSlot[p2ArrayIndex].EmptySlot();
+                        p2ItemObject = null;
+
+                        Debug.Log($"Placed item onto platform: {detectedObject.name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("can not place item on to platform");
+                    }
+                }
+            }
+            #endregion
+            #region DOOR INTERACTION
             // Open doors
             else if (detectedObject.CompareTag("Door"))
             {
                 Door door = detectedObject.GetComponent<Door>();
-                if (door != null)
+                if (cSwitch.p1Active)
                 {
-                    door.OpenDoor();
-                    Debug.Log($"Opened door: {detectedObject.name}");
+                    KeyItem keyItem = p1ItemObject.GetComponent<KeyItem>();
+
+                    if (keyItem != null && keyItem.keyColourOpen == door.thisDoorColour) //Compare key and door colors
+                    {
+                        //Get all doors in the scene
+                        Door[] allDoors = FindObjectsOfType<Door>();
+
+                        foreach (Door otherDoor in allDoors)
+                        {
+                            if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
+                            {
+                                otherDoor.OpenDoor();
+                            }
+
+                            if (keyItem.keyColourClose == otherDoor.thisDoorColour)
+                            {
+                                otherDoor.CloseDoor();
+                            }
+                        }
+
+                        Debug.Log($"Used {keyItem.keyColourOpen} key: Opened all {keyItem.keyColourOpen} doors and closed all {keyItem.keyColourClose} doors.");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Key '{keyItem.keyColourOpen}' does not match door '{door.thisDoorColour}'.");
+                    }
+                }
+                else if (!cSwitch.p1Active)
+                {
+                    KeyItem keyItem = p2ItemObject.GetComponent<KeyItem>();
+
+                    if (keyItem != null && keyItem.keyColourOpen == door.thisDoorColour) //Compare key and door colors
+                    {
+                        //Get all doors in the scene
+                        Door[] allDoors = FindObjectsOfType<Door>();
+
+                        foreach (Door otherDoor in allDoors)
+                        {
+                            if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
+                            {
+                                otherDoor.OpenDoor();
+                            }
+
+                            if (keyItem.keyColourClose == otherDoor.thisDoorColour)
+                            {
+                                otherDoor.CloseDoor();
+                            }
+                        }
+
+                        Debug.Log($"Used {keyItem.keyColourOpen} key: Opened all {keyItem.keyColourOpen} doors and closed all {keyItem.keyColourClose} doors.");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Key '{keyItem.keyColourOpen}' does not match door '{door.thisDoorColour}'.");
+                    }
                 }
             }
+            #endregion
         }
 
         Debug.Log("E pressed, interaction attempted");
     }
 
-
+    #region OBJECT DETECTION
     private List<GameObject> DetectObjects()
     {
         Vector3 boxCenter = gameObject.GetComponent<Collider>().bounds.center; // Center of detection
@@ -206,6 +284,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (RaycastHit hit in detectedHits)
         {
+
             detectedObjects.Add(hit.collider.gameObject); // Store detected objects
         }
 
@@ -239,6 +318,24 @@ public class PlayerController : MonoBehaviour
         return closestPlatform; // Returns nearest platform, or null if none are found
     }
 
+    private void OnDrawGizmos()
+    {
+        // Define BoxCast parameters
+        Vector3 boxCenter = gameObject.GetComponent<Collider>().bounds.center;
+        Vector3 boxHalfExtents = new Vector3(1f, 1f, 1f); // Adjust for BoxCast size
+        Vector3 boxDirection = transform.forward;
+        float boxDistance = interactDistance;
 
+        // Calculate the rotated box position (extended forward)
+        Vector3 boxEndPosition = boxCenter + (boxDirection * boxDistance);
 
+        // Apply player rotation to the Gizmo transform
+        Matrix4x4 rotationMatrix = Matrix4x4.TRS(boxEndPosition, transform.rotation, Vector3.one);
+        Gizmos.matrix = rotationMatrix;
+
+        // Draw a single wire cube that rotates with the player
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(Vector3.zero, boxHalfExtents * 2f); // Cube at forward range
+    }
+    #endregion
 }

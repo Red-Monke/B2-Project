@@ -9,7 +9,7 @@ namespace TransportingObject
         public Transform itemArea;
         public TransportPlatform nextPlatform;
         public float waitTime;
-        [SerializeField] private GameObject currentItem;
+        public GameObject currentItem;
         public bool isOccupied = false;
         public bool waitingForPlayer = false;
 
@@ -22,7 +22,10 @@ namespace TransportingObject
                 item.transform.position = itemArea.position; // Move item onto this platform
                 
                 isOccupied = true;
-                
+
+                InventoryItem itemScript = item.GetComponent<InventoryItem>();
+                if(itemScript != null) { itemScript.assignedPlatform = this; Debug.LogWarning("assigned platform = " + this.name); }
+
                 Debug.Log($"Item '{item.name}' placed on {gameObject.name}");
                 
                 if (!waitingForPlayer && isOccupied) { StartCoroutine(MoveItemAfterDelay()); } //if occupied and not waiting for player to pick up item, transfer item to next platform
@@ -34,7 +37,6 @@ namespace TransportingObject
                 item.SetActive(true);
                 item.transform.position = itemArea.position; // Move item onto this platform
                 isOccupied = true;
-                Debug.Log("waiting for player to pick up item at: " + gameObject.name);
             }
 
         }
@@ -48,7 +50,7 @@ namespace TransportingObject
                 while (nextPlatform.isOccupied)
                 {
                     Debug.Log($"Waiting for {nextPlatform.gameObject.name} to become available...");
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(waitTime);
                 }
             }
             
@@ -73,16 +75,27 @@ namespace TransportingObject
             Debug.Log($"{gameObject.name} is ready for a new item.");
         }
 
-        public GameObject RemoveItem()
+        public void ReturnItem()
         {
-            if (currentItem != null)
+            if(currentItem != null)
             {
-                GameObject itemToReturn = currentItem;
-                ResetPlatform(); 
-                Debug.Log($"Item '{itemToReturn.name}' removed from platform {gameObject.name}");
-                return itemToReturn;
+                InventoryItem itemScript = currentItem.GetComponent<InventoryItem>();
+
+                if(itemScript != null)
+                {
+                    itemScript.ItemCollection();
+                    Debug.Log($"Returning item '{currentItem.name}' to player inventory.");
+                }
+                currentItem = null;
+                isOccupied = false;
+                waitingForPlayer = false;
+
+                ResetPlatform();
             }
-            return null; 
+            else
+            {
+                Debug.LogWarning($"{gameObject.name} has no item to return");
+            }
         }
 
     }

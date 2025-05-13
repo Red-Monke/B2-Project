@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 public class PC1InventoryManager : MonoBehaviour
 {
     public GameObject pc1InventoryDescription;
-    PlayerController p1Control;
     private bool menuActivated;
     public CharacterSwitch cSwitch;
     public ItemSlot[] itemSlot;
@@ -15,8 +14,6 @@ public class PC1InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        itemSlot[0].SelectedSlot();
-
         for(int i = 0; i < itemSlot.Length; i++)
         {
             ItemSlot itemSlots = itemSlot[i].GetComponent<ItemSlot>();
@@ -25,8 +22,6 @@ public class PC1InventoryManager : MonoBehaviour
                 itemSlots.GetIndex(i);
             }
         }
-
-        p1Control = GameObject.FindGameObjectWithTag("Character1").GetComponent<PlayerController>();
     }
 
     void Update()
@@ -53,7 +48,7 @@ public class PC1InventoryManager : MonoBehaviour
     void ItemSelection()
     {
         #region ARROW KEYS CONTROL
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             if (currentItemIndex >= itemSlot.Length -1)
             {
@@ -69,7 +64,7 @@ public class PC1InventoryManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if (currentItemIndex == 0)
             {

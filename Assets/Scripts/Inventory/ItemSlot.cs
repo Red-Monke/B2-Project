@@ -54,8 +54,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         p1inventoryManager = GameObject.FindGameObjectWithTag("Character1UI").GetComponent<PC1InventoryManager>();
         p2inventoryManager = GameObject.FindGameObjectWithTag("Character2UI").GetComponent<PC2InventoryManager>();
         cSwitch = FindObjectOfType<CharacterSwitch>();
-        itemSprite = emptySprite;
-        
+        itemSprite = emptySprite;        
     }
 
     public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
@@ -87,11 +86,11 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
 
     public void OnLeftClick()
     {
-        if(p1inventoryManager.currentItemIndex != thisIndex) { p1inventoryManager.DeselectAllSlots(); SelectedSlot(); p1inventoryManager.currentItemIndex = thisIndex; }
-        if(p2inventoryManager.currentItemIndex != thisIndex) { p2inventoryManager.DeselectAllSlots(); SelectedSlot(); p2inventoryManager.currentItemIndex = thisIndex; }
+        if(cSwitch.p1Active && p1inventoryManager.currentItemIndex != thisIndex) { p1inventoryManager.DeselectAllSlots(); SelectedSlot(); p1inventoryManager.currentItemIndex = thisIndex; }
+        if(!cSwitch.p1Active && p2inventoryManager.currentItemIndex != thisIndex) { p2inventoryManager.DeselectAllSlots(); SelectedSlot(); p2inventoryManager.currentItemIndex = thisIndex; }
 
-        if(p1inventoryManager.currentItemIndex == thisIndex) { p1inventoryManager.DeselectAllSlots(); SelectedSlot(); p1inventoryManager.currentItemIndex = thisIndex; }
-        if(p2inventoryManager.currentItemIndex == thisIndex) { p2inventoryManager.DeselectAllSlots(); SelectedSlot(); p2inventoryManager.currentItemIndex = thisIndex; }
+        if(cSwitch.p1Active && p1inventoryManager.currentItemIndex == thisIndex) { p1inventoryManager.DeselectAllSlots(); SelectedSlot(); p1inventoryManager.currentItemIndex = thisIndex; }
+        if(!cSwitch.p1Active && p2inventoryManager.currentItemIndex == thisIndex) { p2inventoryManager.DeselectAllSlots(); SelectedSlot(); p2inventoryManager.currentItemIndex = thisIndex; }
 
         if (itemDescriptionImage == null)
         {

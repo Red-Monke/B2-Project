@@ -46,7 +46,7 @@ public class PC2InventoryManager : MonoBehaviour
     void ItemSelection()
     {
         #region ARROW KEYS CONTROL
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             if (currentItemIndex >= itemSlot.Length - 1)
             {
@@ -62,7 +62,7 @@ public class PC2InventoryManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if (currentItemIndex == 0)
             {

@@ -1,16 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class KeyItem : MonoBehaviour
+namespace DoorOperations
 {
-    public KeyColour keyColour = new KeyColour(); 
-    public enum KeyColour
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    public class KeyItem : MonoBehaviour
     {
-        Red,
-        Green,
-        Blue,
-        Black,
-        White
+        public KeyColour keyColourOpen = new KeyColour();
+        public KeyColour keyColourClose = new KeyColour();
+        public enum KeyColour
+        {
+            Red,
+            Green,
+            Blue,
+            Black,
+            White
+        }
     }
 }
+
