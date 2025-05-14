@@ -329,6 +329,7 @@ MonoBehaviour:
   itemDescriptionImage: {fileID: 0}
   itemDescriptionNameText: {fileID: 0}
   itemDescriptionText: {fileID: 0}
+  playerObj: {fileID: 0}
   p1Obj: {fileID: 0}
   p2Obj: {fileID: 0}
   respawnDistance: 2

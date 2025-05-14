@@ -36,7 +36,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     #endregion
 
     #region ITEM TRANSPORTATION
-    private GameObject playerObj;
+    public GameObject playerObj;
     public GameObject p1Obj;
     public GameObject p2Obj;
     CharacterSwitch cSwitch;
