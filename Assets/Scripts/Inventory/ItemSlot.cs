@@ -57,11 +57,10 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         itemSprite = emptySprite;        
     }
 
-    public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
+    public void AddItem(string itemName, Sprite itemSprite, GameObject itemObject)
     {
         this.itemName = itemName;
         this.itemSprite = itemSprite;
-        this.itemDescription = itemDescription;
         this.itemObject = itemObject;
 
         Debug.Log("slot update: item sprite = " + itemSprite);
@@ -165,7 +164,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         thisItemSelected = true;
         selectedShader.SetActive(true);
         itemDescriptionNameText.text = itemName;
-        itemDescriptionText.text = itemDescription;
         itemDescriptionImage.sprite = itemImage.sprite;
 
         if (itemDescriptionImage == null)

@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class PC1InventoryManager : MonoBehaviour
 {
-    public GameObject pc1InventoryDescription;
     private bool menuActivated;
     public CharacterSwitch cSwitch;
     public ItemSlot[] itemSlot;
@@ -30,12 +29,10 @@ public class PC1InventoryManager : MonoBehaviour
         {
             if (Input.GetButtonDown("Inventory") && menuActivated)
             {
-                pc1InventoryDescription.SetActive(false);
                 menuActivated = false;
             }
             else if (Input.GetButtonDown("Inventory") && !menuActivated)
             {
-                pc1InventoryDescription.SetActive(true);
                 menuActivated = true;
             }
 
@@ -83,14 +80,14 @@ public class PC1InventoryManager : MonoBehaviour
 
     }
 
-    public void AddItem(string itemName, Sprite itemSprite, string itemDescription, GameObject itemObject)
+    public void AddItem(string itemName, Sprite itemSprite, GameObject itemObject)
     { 
         for (int i = 0; i < itemSlot.Length; i++)
         {
             if (itemSlot[i].isFull == false)
             {
                 Debug.Log("itemName = " + itemName + " Sprite = " + itemSprite);
-                itemSlot[i].AddItem(itemName, itemSprite, itemDescription, itemObject);
+                itemSlot[i].AddItem(itemName, itemSprite, itemObject);
                 return;
             }
         }

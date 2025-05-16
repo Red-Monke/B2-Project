@@ -8,7 +8,6 @@ public class InventoryItem : MonoBehaviour
 {
     public string itemName;
     public Sprite sprite;
-    [TextArea]public string itemDescription;
     private GameObject itemObject;
     private CharacterSwitch cSwitch;
     private PC1InventoryManager p1InventoryManager;
@@ -33,13 +32,13 @@ public class InventoryItem : MonoBehaviour
         if (cSwitch.p1Active)
         {
             collected = true;
-            p1InventoryManager.AddItem(itemName, sprite, itemDescription, itemObject);
+            p1InventoryManager.AddItem(itemName, sprite,itemObject);
             gameObject.SetActive(false);
         }
         else if (!cSwitch.p1Active)
         {
             collected = true;
-            p2InventoryManager.AddItem(itemName, sprite, itemDescription, itemObject);
+            p2InventoryManager.AddItem(itemName, sprite, itemObject);
             gameObject.SetActive(false);
         }
     }
