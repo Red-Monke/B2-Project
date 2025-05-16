@@ -121,6 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyColourOpen: 1
   keyColourClose: 0
+  keySFX: {fileID: 8300000, guid: 4a06e3895cf0d044eade21dd79e08261, type: 3}
 --- !u!65 &4914077809648416753
 BoxCollider:
   m_ObjectHideFlags: 0

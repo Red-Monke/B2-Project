@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     int p1ArrayIndex;
     int p2ArrayIndex;
     bool gameIsPaused = false;
+    public bool doorSoundPlayed;
     #endregion
 
 
@@ -93,6 +94,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Pause pressed");
     }
 
+    private void LateUpdate()
+    {
+        doorSoundPlayed = false;
+    }
 
     #region PLAYER MOVEMENT
     private void PlayerMovement()
@@ -150,10 +155,14 @@ public class PlayerController : MonoBehaviour
                     if(p1Inventory.itemSlot[p1Inventory.itemSlot.Length - 1].isFull == false)
                     {
                         InventoryItem item = detectedObject.GetComponent<InventoryItem>();
-                        if (item != null)
+                        KeyItem keyItem = detectedObject.GetComponent<KeyItem>();
+                        if (item != null && keyItem != null)
                         {
+                            keyItem.KeyPickup();
                             item.ItemCollection();
+
                             Debug.Log($"Collected item: {detectedObject.name}");
+                            Debug.Log($"Picked up key: {detectedObject.name}");
                             break;
                         }
                     }
@@ -167,10 +176,14 @@ public class PlayerController : MonoBehaviour
                     if (p2Inventory.itemSlot[p2Inventory.itemSlot.Length - 1].isFull == false)
                     {
                         InventoryItem item = detectedObject.GetComponent<InventoryItem>();
-                        if (item != null)
+                        KeyItem keyItem = detectedObject.GetComponent<KeyItem>();
+                        if (item != null && keyItem != null)
                         {
+                            keyItem.KeyPickup();
                             item.ItemCollection();
+
                             Debug.Log($"Collected item: {detectedObject.name}");
+                            Debug.Log($"Picked up key: {detectedObject.name}");
                             break;
                         }
                     }

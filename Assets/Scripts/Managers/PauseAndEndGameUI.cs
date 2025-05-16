@@ -5,7 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class PauseAndEndGameUI : MonoBehaviour
 {
-
+    AudioManager audioManager;
+    public bool gameSceneCalled = false;
+    public bool gameWin = false;
+    [SerializeField] GameObject gameWinObj;
+    private void Start()
+    {
+        if(SceneManager.GetActiveScene().name == "TitleScene") { gameObject.SetActive(true);} else { gameObject.SetActive(false); }
+        audioManager = FindObjectOfType<AudioManager>();
+    }
     public void NextLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -14,12 +22,19 @@ public class PauseAndEndGameUI : MonoBehaviour
         if(currentSceneIndex < totalScenes)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            gameSceneCalled = true;
+            audioManager.UpdateMusic();
         }
         else { EndGame(); }
     }
 
-    public void EndGame() { Debug.LogWarning("End of available levels, activating end game canvas"); }
-    public void GoToTitle() { Debug.LogWarning("button pressed, returning to title"); }
+    void GameWon()
+    {
+         gameWinObj.SetActive(true); 
+    }
+
+    public void EndGame() { SceneManager.LoadScene(0); audioManager.startOfGame = true; audioManager.UpdateMusic(); GameWon(); }
+    public void GoToTitle() { SceneManager.LoadScene(0); audioManager.startOfGame = true; audioManager.UpdateMusic(); }
     public void QuitGame() { Application.Quit(); }
     public void RestartLevel() { SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
 

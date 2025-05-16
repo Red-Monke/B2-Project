@@ -2,6 +2,7 @@ namespace TransportingObject
 {
     using System.Collections;
     using System.Collections.Generic;
+    using DoorOperations;
     using UnityEngine;
 
     public class TransportPlatform : MonoBehaviour
@@ -80,10 +81,12 @@ namespace TransportingObject
             if(currentItem != null)
             {
                 InventoryItem itemScript = currentItem.GetComponent<InventoryItem>();
+                KeyItem keyItem = currentItem.GetComponent<KeyItem>();
 
                 if(itemScript != null)
                 {
                     itemScript.ItemCollection();
+                    keyItem.KeyPickup();
                     Debug.Log($"Returning item '{currentItem.name}' to player inventory.");
                 }
                 currentItem = null;

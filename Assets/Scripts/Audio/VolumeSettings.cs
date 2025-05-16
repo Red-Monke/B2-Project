@@ -3,49 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class VolumeSettings : MonoBehaviour
 {
     public AudioMixer myMixer;
     public Slider musicSlider;
     public Slider sfxSlider;
-
-    private void Start()
+    private void Awake()
     {
-        SetMusicVolume();
-        SetSFXVolume();
-
-        if(PlayerPrefs.HasKey("musicVolume"))
-        {
-            LoadVolume();
-        }
-        else
-        {
-            SetMusicVolume();
-            SetSFXVolume();
-        }
+        LoadVolume();
     }
 
     public void SetMusicVolume()
     {
         float volume = musicSlider.value;
-        myMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
-        PlayerPrefs.SetFloat("musicVolume", volume);
+        if (PlayerPrefs.GetFloat("musicVolume") != volume) // Only update if changed
+        {
+            myMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
+            PlayerPrefs.SetFloat("musicVolume", volume);
+            PlayerPrefs.Save();
+            Debug.Log($"Updated music volume: {volume}");
+        }
+
     }
 
     public void SetSFXVolume()
     {
         float volume = sfxSlider.value;
-        myMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
-        PlayerPrefs.SetFloat("sfxVolume", volume);
+        if (PlayerPrefs.GetFloat("sfxVolume") != volume) // Only update if changed
+        {
+            myMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+            PlayerPrefs.SetFloat("sfxVolume", volume);
+            PlayerPrefs.Save();
+            Debug.Log($"Updated SFX volume: {volume}");
+        }
+
     }
 
-    void LoadVolume()
+    public void LoadVolume()
     {
-        musicSlider.value = PlayerPrefs.GetFloat("musicVolume");
-        SetMusicVolume();
-        sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume");
-        SetSFXVolume();
+        if (PlayerPrefs.HasKey("musicVolume"))
+        {
+            musicSlider.value = PlayerPrefs.GetFloat("musicVolume");
+            SetMusicVolume();
+        }
+
+        if (PlayerPrefs.HasKey("sfxVolume"))
+        {
+            sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume");
+            SetSFXVolume();
+        }
+
     }
 
 }

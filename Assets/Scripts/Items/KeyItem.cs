@@ -8,6 +8,15 @@ namespace DoorOperations
     {
         public KeyColour keyColourOpen = new KeyColour();
         public KeyColour keyColourClose = new KeyColour();
+
+        public AudioClip keySFX;
+
+        public void KeyPickup()
+        {
+            AudioManager.Instance.PlaySFX(keySFX);
+            Debug.Log($"Used key {gameObject.name}.");
+        }
+
         public enum KeyColour
         {
             Red,

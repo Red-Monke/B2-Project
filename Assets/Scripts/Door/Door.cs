@@ -10,7 +10,11 @@ public class Door : MonoBehaviour, IDoorActions
     BoxCollider doorBox;
     MeshRenderer doorMesh;
     #endregion
+    
+    public AudioClip doorOpenSFX;
+    public float doorVolume = 1f;
 
+    public static bool doorSoundPlayed = false;
     void Start()
     {
         doorBox = gameObject.GetComponent<BoxCollider>();
@@ -21,12 +25,26 @@ public class Door : MonoBehaviour, IDoorActions
         doorBox.enabled = false;
         doorMesh.enabled = false;
         Debug.Log($"Door {gameObject.name} opened.");
+
+        if (!doorSoundPlayed) 
+        {
+            AudioManager.Instance.PlaySFX(doorOpenSFX);
+            doorSoundPlayed = true;
+        }
+
+        Debug.Log($"Opened {gameObject.name} with sound at volume {doorVolume}.");
+    }
+
+    private void LateUpdate()
+    {
+        doorSoundPlayed=false;
     }
 
     public void CloseDoor()
     {
         doorBox.enabled = true;
         doorMesh.enabled = true;
+
         Debug.Log($"Door {gameObject.name} closed.");
     }
 }
