@@ -8,7 +8,7 @@ public class CamManager : MonoBehaviour
     [SerializeField] GameObject pc2Obj;     // Player Character 2
     [SerializeField] float lerpDuration = 1f; // Duration for the transition
     [SerializeField] CharacterSwitch cSwitch;
-    private bool isLerping = false;         // Flag to prioritize lerp
+    public bool isLerping = false;         // Flag to prioritize lerp
 
     void Start()
     {

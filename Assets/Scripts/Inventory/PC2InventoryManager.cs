@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PC2InventoryManager : MonoBehaviour
 {
-    private bool menuActivated;
     public CharacterSwitch cSwitch;
     public ItemSlot[] itemSlot;
     public int currentItemIndex;
@@ -27,15 +26,6 @@ public class PC2InventoryManager : MonoBehaviour
     {
         if (!cSwitch.p1Active)
         {
-            if (Input.GetButtonDown("Inventory") && menuActivated)
-            {
-                menuActivated = false;
-            }
-            else if (Input.GetButtonDown("Inventory") && !menuActivated)
-            {
-                menuActivated = true;
-            }
-
             ItemSelection();
         }
     }

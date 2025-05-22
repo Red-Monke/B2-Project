@@ -11,15 +11,14 @@ public class PlayerController : MonoBehaviour
     [Header("Object References")]
     public Rigidbody pb;
     public BoxCollider coll;
-    public GameObject pauseUI;
-    public GameObject p1InventoryUI;
-    public GameObject p2InventoryUI;
+    public PauseAndEndGameUI pauseScript;
     public PC1InventoryManager p1Inventory;
     public PC2InventoryManager p2Inventory;
     public CharacterSwitch cSwitch;
     public GameObject p1ItemObject;
     public GameObject p2ItemObject;
     public LayerMask groundLayer;
+    public CamManager cManager;
     #endregion
 
     #region MOVEMENT VARIABLES
@@ -49,7 +48,7 @@ public class PlayerController : MonoBehaviour
     {
         PlayerMovement();
         if (Input.GetButtonDown("Interact")) { Interact(); }
-        if (Input.GetButtonDown("Pause")) { Pause(); }
+        if (Input.GetButtonDown("Pause")) { pauseScript.Pause(); }
         p1ArrayIndex = p1Inventory.currentItemIndex;
         p2ArrayIndex = p2Inventory.currentItemIndex;
         p1ItemObject = p1Inventory.itemSlot[p1ArrayIndex].itemObject;
@@ -58,41 +57,6 @@ public class PlayerController : MonoBehaviour
         if (gameIsPaused) { Time.timeScale = 0; } else { Time.timeScale = 1; }
     }
 
-    private void Pause()
-    {
-        if (cSwitch.p1Active)
-        {
-            if (!gameIsPaused)
-            {
-                pauseUI.SetActive(true);
-                p1InventoryUI.SetActive(false);
-                gameIsPaused = true;
-            }
-            else
-            {
-                pauseUI.SetActive(false);
-                p1InventoryUI.SetActive(true);
-                gameIsPaused = false;
-            }
-        }
-        else if (!cSwitch.p1Active)
-        {
-            if (!gameIsPaused)
-            {
-                pauseUI.SetActive(true);
-                p2InventoryUI.SetActive(false);
-                gameIsPaused = true;
-            }
-            else
-            {
-                pauseUI.SetActive(false);
-                p2InventoryUI.SetActive(true);
-                gameIsPaused = false;
-            }
-        }
-
-        Debug.Log("Pause pressed");
-    }
 
     private void LateUpdate()
     {
@@ -102,20 +66,24 @@ public class PlayerController : MonoBehaviour
     #region PLAYER MOVEMENT
     private void PlayerMovement()
     {
-        if (Input.GetButton("Vertical") && !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)))
+        if (!cManager.isLerping)
         {
-            MoveForward();
+            if (Input.GetButton("Vertical") && !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)))
+            {
+                MoveForward();
+            }
+
+            if (Input.GetButtonDown("Jump") && IsGrounded())
+            {
+                Jump();
+            }
+
+            if (Input.GetButton("Horizontal") && !(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)))
+            {
+                RotatePlayer();
+            }
         }
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
-        {
-            Jump();
-        }
-
-        if (Input.GetButton("Horizontal") && !(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)))
-        {
-            RotatePlayer();
-        }
     }
     public void Jump()
     {
@@ -367,6 +335,33 @@ public class PlayerController : MonoBehaviour
         }
 
         return closestPlatform; // Returns nearest platform, or null if none are found
+    }
+
+    public Door DetectNearbyDoor()
+    {
+        Vector3 boxCenter = gameObject.GetComponent<Collider>().bounds.center; // Center of detection
+        Vector3 boxHalfExtents = new Vector3(1f, 1f, 1f); // Box size for scanning
+        Vector3 boxDirection = transform.forward; // Forward direction for BoxCast
+
+        RaycastHit[] hits = Physics.BoxCastAll(boxCenter, boxHalfExtents, boxDirection, Quaternion.identity, interactDistance, interactableLayer);
+
+        Door closestDoor = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.CompareTag("Door"))
+            {
+                float distance = Vector3.Distance(transform.position, hit.collider.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestDoor = hit.collider.GetComponent<Door>();
+                }
+            }
+        }
+
+        return closestDoor; // Returns nearest platform, or null if none are found
     }
 
     private void OnDrawGizmos()

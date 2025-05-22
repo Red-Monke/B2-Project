@@ -256,20 +256,27 @@ MonoBehaviour:
   pb: {fileID: 4806326695525725526}
   coll: {fileID: 5720490152925095179}
   pauseUI: {fileID: 0}
+  p1InventoryUI: {fileID: 0}
+  p2InventoryUI: {fileID: 0}
   p1Inventory: {fileID: 0}
-  arrayIndex: 0
-  itemObject: {fileID: 0}
+  p2Inventory: {fileID: 0}
+  cSwitch: {fileID: 0}
+  p1ItemObject: {fileID: 0}
+  p2ItemObject: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  cManager: {fileID: 0}
   moveSpeed: 5
-  rotationSpeed: 1
-  jumpForce: 50
+  rotationSpeed: 5
+  jumpForce: 10
   raycastDistance: 1
-  interactDistance: 3
+  interactDistance: 2
   interactableLayer:
     serializedVersion: 2
     m_Bits: 512
+  itemTransfered: 0
+  doorSoundPlayed: 0
 --- !u!1 &8354262440666608074
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,12 +7,20 @@ public class PauseAndEndGameUI : MonoBehaviour
 {
     AudioManager audioManager;
     public bool gameSceneCalled = false;
-    public bool gameWin = false;
+    public static bool gameWin = false;
+    CharacterSwitch cSwitch;
+    bool gameIsPaused = false;
+    public GameObject p1InventoryUI;
+    public GameObject p2InventoryUI;
     [SerializeField] GameObject gameWinObj;
     private void Start()
     {
         if(SceneManager.GetActiveScene().name == "TitleScene") { gameObject.SetActive(true);} else { gameObject.SetActive(false); }
         audioManager = FindObjectOfType<AudioManager>();
+        cSwitch = FindObjectOfType<CharacterSwitch>();
+        if (gameWin) { gameWinObj.SetActive(true); }
+        if (gameIsPaused) { Time.timeScale = 0; } else { Time.timeScale = 1; }
+
     }
     public void NextLevel()
     {
@@ -28,12 +36,45 @@ public class PauseAndEndGameUI : MonoBehaviour
         else { EndGame(); }
     }
 
-    void GameWon()
+    public void Pause()
     {
-         gameWinObj.SetActive(true); 
+        if (cSwitch.p1Active)
+        {
+            if (!gameIsPaused)
+            {
+                gameObject.SetActive(true);
+                p1InventoryUI.SetActive(false);
+                gameIsPaused = true;
+            }
+            else
+            {
+                gameObject.SetActive(false);
+                p1InventoryUI.SetActive(true);
+                gameIsPaused = false;
+                Debug.Log("Unpausing Game");
+            }
+        }
+        else if (!cSwitch.p1Active)
+        {
+            if (!gameIsPaused)
+            {
+                gameObject.SetActive(true);
+                p2InventoryUI.SetActive(false);
+                gameIsPaused = true;
+            }
+            else
+            {
+                gameObject.SetActive(false);
+                p2InventoryUI.SetActive(true);
+                gameIsPaused = false;
+                Debug.Log("Unpausing Game");
+            }
+        }
+
+        Debug.Log("Pause pressed");
     }
 
-    public void EndGame() { SceneManager.LoadScene(0); audioManager.startOfGame = true; audioManager.UpdateMusic(); GameWon(); }
+    public void EndGame() { SceneManager.LoadScene(0); audioManager.startOfGame = true; audioManager.UpdateMusic(); gameWinObj.SetActive(true); gameWin = true; }
     public void GoToTitle() { SceneManager.LoadScene(0); audioManager.startOfGame = true; audioManager.UpdateMusic(); }
     public void QuitGame() { Application.Quit(); }
     public void RestartLevel() { SceneManager.LoadScene(SceneManager.GetActiveScene().name); }

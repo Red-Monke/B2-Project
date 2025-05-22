@@ -6,14 +6,15 @@ using UnityEngine.EventSystems;
 
 public class PC1InventoryManager : MonoBehaviour
 {
-    private bool menuActivated;
     public CharacterSwitch cSwitch;
     public ItemSlot[] itemSlot;
     public int currentItemIndex;
 
     private void Start()
     {
-        for(int i = 0; i < itemSlot.Length; i++)
+        itemSlot[0].SelectedSlot();
+
+        for (int i = 0; i < itemSlot.Length; i++)
         {
             ItemSlot itemSlots = itemSlot[i].GetComponent<ItemSlot>();
             if(itemSlots != null)
@@ -27,19 +28,8 @@ public class PC1InventoryManager : MonoBehaviour
     {
         if (cSwitch.p1Active)
         {
-            if (Input.GetButtonDown("Inventory") && menuActivated)
-            {
-                menuActivated = false;
-            }
-            else if (Input.GetButtonDown("Inventory") && !menuActivated)
-            {
-                menuActivated = true;
-            }
-
             ItemSelection();
-        }
-
-        
+        }    
     }
 
     void ItemSelection()

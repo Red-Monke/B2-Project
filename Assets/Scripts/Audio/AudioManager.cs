@@ -41,33 +41,7 @@ public class AudioManager : MonoBehaviour
     {
         string currentScene = SceneManager.GetActiveScene().name;
         int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-        /*
-        if (sceneCaller.gameSceneCalled)
-        {
-            if (sceneIndex == 0)
-            {
-                if (musicSource.clip != gameMusicClip)
-                {
-                    musicSource.clip = null;
-                    musicSource.clip = gameMusicClip;
-                    musicSource.Play();
-                    sceneCaller.gameSceneCalled = false;
-                    Debug.LogWarning("Game music playing");
-                    Debug.LogWarning($"UpdateMusic called from:  { currentScene }");
-                }   
-            }
-            else if(sceneIndex >= 0 && musicSource.clip != gameMusicClip)
-            {
-                musicSource.clip = null;
-                musicSource.clip = gameMusicClip;
-                musicSource.Play();
-                sceneCaller.gameSceneCalled = false;
-                Debug.LogWarning("Game music playing");
-                Debug.LogWarning($"UpdateMusic called from:  {currentScene}");
-            }
-            return;
-        }
-        */
+
         if (startOfGame)
         {
             Debug.LogWarning("Going To Title");

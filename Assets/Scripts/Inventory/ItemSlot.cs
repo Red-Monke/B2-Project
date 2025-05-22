@@ -8,9 +8,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
 {
     #region ITEM DATA
     [Header("Item Data")]
-    public string itemName;
     public Sprite itemSprite;
-    public string itemDescription;
     public GameObject itemObject;
     #endregion
 
@@ -28,18 +26,12 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     public bool thisItemSelected;
     #endregion
 
-    #region ITEM DESCRIPTION SLOT
-    [Header("Item Description")]
-    public Image itemDescriptionImage;
-    public TMP_Text itemDescriptionNameText;
-    public TMP_Text itemDescriptionText;
-    #endregion
-
     #region ITEM TRANSPORTATION
     public GameObject playerObj;
     public GameObject p1Obj;
     public GameObject p2Obj;
-    CharacterSwitch cSwitch;
+   // public GameObject cSwitchObj;
+    public CharacterSwitch cSwitch;
     [SerializeField] float respawnDistance;
     public float raycastDistance;
     #endregion
@@ -53,13 +45,12 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
         p1inventoryManager = GameObject.FindGameObjectWithTag("Character1UI").GetComponent<PC1InventoryManager>();
         p2inventoryManager = GameObject.FindGameObjectWithTag("Character2UI").GetComponent<PC2InventoryManager>();
-        cSwitch = FindObjectOfType<CharacterSwitch>();
+       // cSwitch = cSwitchObj.GetComponent<CharacterSwitch>();
         itemSprite = emptySprite;        
     }
 
     public void AddItem(string itemName, Sprite itemSprite, GameObject itemObject)
     {
-        this.itemName = itemName;
         this.itemSprite = itemSprite;
         this.itemObject = itemObject;
 
@@ -91,10 +82,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         if(cSwitch.p1Active && p1inventoryManager.currentItemIndex == thisIndex) { p1inventoryManager.DeselectAllSlots(); SelectedSlot(); p1inventoryManager.currentItemIndex = thisIndex; }
         if(!cSwitch.p1Active && p2inventoryManager.currentItemIndex == thisIndex) { p2inventoryManager.DeselectAllSlots(); SelectedSlot(); p2inventoryManager.currentItemIndex = thisIndex; }
 
-        if (itemDescriptionImage == null)
-        {
-            itemDescriptionImage.sprite = emptySprite;
-        }
     }
 
     public void OnRightClick()
@@ -104,6 +91,8 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
 
         TransportPlatform platform1 = p1Control.DetectNearbyPlatform();
         TransportPlatform platform2 = p2Control.DetectNearbyPlatform();
+        Door door1 = p1Control.DetectNearbyDoor();
+        Door door2 = p2Control.DetectNearbyDoor();
 
         #region CHARACTER 1 RMC ACTIONS
         if (cSwitch.p1Active)
@@ -113,6 +102,12 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
                 // Place item onto platform if nearby
                 platform1.PlaceItem(itemObject);
                 Debug.Log($"Placed '{itemObject.name}' onto platform: {platform1.gameObject.name}");
+            }
+            else if (door1 != null)
+            {
+                p1Control.p1ItemObject = itemObject;
+                p1Control.Interact();
+                return;
             }
             else
             {
@@ -134,6 +129,12 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
                 // Place item onto platform if nearby
                 platform2.PlaceItem(itemObject);
                 Debug.Log($"Placed '{itemObject.name}' onto platform: {platform2.gameObject.name}");
+            }
+            else if (door2 != null)
+            {
+                p2Control.p2ItemObject = itemObject;
+                p2Control.Interact();
+                return;
             }
             else
             {
@@ -163,15 +164,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
         thisItemSelected = true;
         selectedShader.SetActive(true);
-        itemDescriptionNameText.text = itemName;
-        itemDescriptionImage.sprite = itemImage.sprite;
-
-        if (itemDescriptionImage == null)
-        {
-            itemDescriptionImage.sprite = emptySprite;
-        }
-
-        Debug.Log("item description updated: item sprite = " + itemSprite);
     }
 
     public void DeselectSlot()
@@ -186,12 +178,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         //resets boolean to allow for another item to use that slot 
         itemImage.sprite = emptySprite;
         itemObject = null;
-        itemDescriptionNameText.text = "";
-        itemDescriptionText.text = "";
-        itemName = "";
-        itemDescription = "";
-        itemDescriptionImage.sprite = emptySprite;
-
         isFull = false;
     }
 
