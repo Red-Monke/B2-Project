@@ -12,6 +12,7 @@ public class PC1InventoryManager : MonoBehaviour
 
     private void Start()
     {
+        //upon scene initialization, assign the first itemslot to be the currently selected slot 
         itemSlot[0].SelectedSlot();
 
         for (int i = 0; i < itemSlot.Length; i++)
@@ -39,6 +40,8 @@ public class PC1InventoryManager : MonoBehaviour
         {
             if (currentItemIndex >= itemSlot.Length -1)
             {
+                //if the next slot to be selected's index would be over the amount of slots available
+                //select the first slot in the array instead when key is pressed
                 DeselectAllSlots();
                 currentItemIndex = 0;
                 itemSlot[currentItemIndex].SelectedSlot();
@@ -55,6 +58,8 @@ public class PC1InventoryManager : MonoBehaviour
         {
             if (currentItemIndex == 0)
             {
+                //if the current selected item is first in the array
+                //select the last slot in the array instead when key is pressed
                 DeselectAllSlots();
                 currentItemIndex = itemSlot.Length -1;
                 itemSlot[currentItemIndex].SelectedSlot();
@@ -67,7 +72,6 @@ public class PC1InventoryManager : MonoBehaviour
             }
         }
         #endregion
-
     }
 
     public void AddItem(string itemName, Sprite itemSprite, GameObject itemObject)

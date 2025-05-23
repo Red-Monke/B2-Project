@@ -28,6 +28,7 @@ public class Door : MonoBehaviour, IDoorActions
 
         if (!doorSoundPlayed) 
         {
+            //makes sure only one instance of the door sound is played if there are multiple of the same door in each scene
             AudioManager.Instance.PlaySFX(doorOpenSFX);
             doorSoundPlayed = true;
         }

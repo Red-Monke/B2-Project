@@ -37,6 +37,8 @@ public class PC2InventoryManager : MonoBehaviour
         {
             if (currentItemIndex >= itemSlot.Length - 1)
             {
+                //if the next slot to be selected's index would be over the amount of slots available
+                //select the first slot in the array instead when key is pressed
                 DeselectAllSlots();
                 currentItemIndex = 0;
                 itemSlot[currentItemIndex].SelectedSlot();
@@ -59,6 +61,8 @@ public class PC2InventoryManager : MonoBehaviour
             }
             else
             {
+                //if the current selected item is first in the array
+                //select the last slot in the array instead when key is pressed
                 DeselectAllSlots();
                 currentItemIndex--;
                 itemSlot[currentItemIndex].SelectedSlot();

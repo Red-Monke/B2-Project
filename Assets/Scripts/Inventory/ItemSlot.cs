@@ -97,17 +97,19 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         #region CHARACTER 1 RMC ACTIONS
         if (cSwitch.p1Active)
         {
-            if (platform1 != null)
+            if (door1 != null)
+            {
+                //as Character 1, if near a door, run the interact method in the playercontroller script
+                //after assigning the item to be used as the item right clicked
+                p1Control.p1ItemObject = itemObject;
+                p1Control.Interact();
+                return;
+            }
+            else if (platform1 != null)
             {
                 // Place item onto platform if nearby
                 platform1.PlaceItem(itemObject);
                 Debug.Log($"Placed '{itemObject.name}' onto platform: {platform1.gameObject.name}");
-            }
-            else if (door1 != null)
-            {
-                p1Control.p1ItemObject = itemObject;
-                p1Control.Interact();
-                return;
             }
             else
             {
@@ -118,23 +120,24 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
                 Debug.Log($"Dropped '{itemObject.name}' in front of player.");
             }
         }
-
         #endregion
 
         #region CHARACTER 2 RMC ACTIONS
         if (!cSwitch.p1Active)
         {
-            if (platform2 != null)
+            if (door2 != null)
+            {
+                //as Character 2, if near a door, run the interact method in the playercontroller script
+                //after assigning the item to be used as the item right clicked
+                p2Control.p2ItemObject = itemObject;
+                p2Control.Interact();
+                return;
+            }
+            else if (platform2 != null)
             {
                 // Place item onto platform if nearby
                 platform2.PlaceItem(itemObject);
                 Debug.Log($"Placed '{itemObject.name}' onto platform: {platform2.gameObject.name}");
-            }
-            else if (door2 != null)
-            {
-                p2Control.p2ItemObject = itemObject;
-                p2Control.Interact();
-                return;
             }
             else
             {

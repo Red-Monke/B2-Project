@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
     #region PLAYER MOVEMENT
     private void PlayerMovement()
     {
-        if (!cManager.isLerping)
+        if (!cManager.isLerping) //if the camera is not lerping between players, allow player movement actions
         {
             if (Input.GetButton("Vertical") && !(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)))
             {
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
             // Collect items
             if (detectedObject.CompareTag("Item"))
             {
-                if (cSwitch.p1Active)
+                if (cSwitch.p1Active) //if Character 1 is active, and there is room in the inventory, collect item
                 {
                     if(p1Inventory.itemSlot[p1Inventory.itemSlot.Length - 1].isFull == false)
                     {
@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
                         Debug.LogWarning("can not collect item, inventory is full");
                     }
                 }
-                else if (!cSwitch.p1Active)
+                else if (!cSwitch.p1Active) //if Character 2 is active, and there is room in the inventory, collect item
                 {
                     if (p2Inventory.itemSlot[p2Inventory.itemSlot.Length - 1].isFull == false)
                     {
@@ -168,8 +168,8 @@ public class PlayerController : MonoBehaviour
             else if (detectedObject.CompareTag("Platform"))
             {
                 TransportPlatform platform = detectedObject.GetComponent<TransportPlatform>();
-                if (cSwitch.p1Active)
-                {
+                if (cSwitch.p1Active) //if Character 1 is active, a platform is detected and said platform has an item,
+                {                     //pick up item
                     if (platform != null && platform.isOccupied)
                     {
                         Debug.Log($"Interacting with occupied platform: {platform.gameObject.name}");
@@ -193,8 +193,8 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (!cSwitch.p1Active)
                 {
-                    if (platform != null && platform.isOccupied)
-                    {
+                    if (platform != null && platform.isOccupied) //if Character 2 is active, a platform is detected and said platform has an item,
+                    {                                            //pick up item
                         Debug.Log($"Interacting with occupied platform: {platform.gameObject.name}");
 
                         platform.ReturnItem();
@@ -221,7 +221,7 @@ public class PlayerController : MonoBehaviour
             else if (detectedObject.CompareTag("Door"))
             {
                 Door door = detectedObject.GetComponent<Door>();
-                if (cSwitch.p1Active)
+                if (cSwitch.p1Active) //if Character 1 is active
                 {
                     KeyItem keyItem = p1ItemObject.GetComponent<KeyItem>();
 
@@ -232,11 +232,13 @@ public class PlayerController : MonoBehaviour
 
                         foreach (Door otherDoor in allDoors)
                         {
+                            //if key and door colour match, open all doors of the same colour in the scene
                             if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
                             {
                                 otherDoor.OpenDoor();
                             }
 
+                            //based on the assigned colour to close on the key, close all doors of said colour in the scene
                             if (keyItem.keyColourClose == otherDoor.thisDoorColour)
                             {
                                 otherDoor.CloseDoor();
@@ -252,7 +254,7 @@ public class PlayerController : MonoBehaviour
 
                     if(keyItem == null) { Debug.LogWarning("No key available in " + p1Inventory.itemSlot[p1ArrayIndex]); }
                 }
-                else if (!cSwitch.p1Active)
+                else if (!cSwitch.p1Active) //if Character 2 is active
                 {
                     KeyItem keyItem = p2ItemObject.GetComponent<KeyItem>();
 
@@ -263,11 +265,13 @@ public class PlayerController : MonoBehaviour
 
                         foreach (Door otherDoor in allDoors)
                         {
+                            //if key and door colour match, open all doors of the same colour in the scene
                             if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
                             {
                                 otherDoor.OpenDoor();
                             }
 
+                            //based on the assigned colour to close on the key, close all doors of said colour in the scene
                             if (keyItem.keyColourClose == otherDoor.thisDoorColour)
                             {
                                 otherDoor.CloseDoor();
@@ -291,6 +295,8 @@ public class PlayerController : MonoBehaviour
     }
 
     #region OBJECT DETECTION
+    //general method for detecting objects in front of the player, detects all object types as long as they are on the interactable layer
+    //can detect multiple objects at once
     private List<GameObject> DetectObjects()
     {
         Vector3 boxCenter = gameObject.GetComponent<Collider>().bounds.center; // Center of detection
@@ -303,7 +309,6 @@ public class PlayerController : MonoBehaviour
 
         foreach (RaycastHit hit in detectedHits)
         {
-
             detectedObjects.Add(hit.collider.gameObject); // Store detected objects
         }
 

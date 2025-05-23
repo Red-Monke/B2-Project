@@ -40,10 +40,10 @@ public class AudioManager : MonoBehaviour
     public void UpdateMusic()
     {
         string currentScene = SceneManager.GetActiveScene().name;
-        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
 
         if (startOfGame)
         {
+            //if in or loading the title scene, and the title music is not playing, change the music clip being played to the title music
             Debug.LogWarning("Going To Title");
 
             if (musicSource.clip != titleMusicClip)
@@ -56,9 +56,10 @@ public class AudioManager : MonoBehaviour
                 Debug.LogWarning($"UpdateMusic called from:  {currentScene}");
             }
         }
-        else if(!startOfGame && musicSource.clip == gameMusicClip) { return; }
+        else if(!startOfGame && musicSource.clip == gameMusicClip) { return; } //if already in game and the game music is already playing, do nothing
         else if (!startOfGame)
         {
+            //if in or loading a game level, and the level music is not playing, change the music clip being played to the game music 
             musicSource.clip = null;
             musicSource.clip = gameMusicClip;
             musicSource.Play();
@@ -77,6 +78,7 @@ public class AudioManager : MonoBehaviour
 
         if (PlayerPrefs.HasKey("sfxVolume"))
         {
+            //if player prefs already has a sfxVolume key, assign the value stored to storedSFXVolume
             storedSFXVolume = PlayerPrefs.GetFloat("sfxVolume");
         }
         else
@@ -86,6 +88,7 @@ public class AudioManager : MonoBehaviour
 
         if (PlayerPrefs.HasKey("musicVolume"))
         {
+            //if player prefs already has a musicVolume key, assign the value stored to storedMusicVolume
             storedMusicVolume = PlayerPrefs.GetFloat("musicVolume");
         }
         else
@@ -93,6 +96,7 @@ public class AudioManager : MonoBehaviour
             storedMusicVolume = 1f; // Default volume
         }
 
+        //assign volume values based on the value assigned to the stored value from earlier
         sfxVolume = storedSFXVolume;
         sfxSource.volume = sfxVolume;
 
@@ -110,20 +114,13 @@ public class AudioManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject); //keep this instance across all scenes
+
         }
-        else
+        else if(Instance != this)
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // erase any duplicates in scene before scene loads.
         }
-
-        if (FindObjectsOfType<AudioManager>().Length > 1)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
-
     }
 
 }

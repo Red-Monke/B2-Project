@@ -20,13 +20,14 @@ public class PauseAndEndGameUI : MonoBehaviour
         cSwitch = FindObjectOfType<CharacterSwitch>();
         if (gameWin) { gameWinObj.SetActive(true); }
         if (gameIsPaused) { Time.timeScale = 0; } else { Time.timeScale = 1; }
-
     }
     public void NextLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int totalScenes = SceneManager.sceneCountInBuildSettings -1;
 
+        //if there is another scene/level available after the current scene, go to that scene/level
+        //otherwise, run the EndGame method
         if(currentSceneIndex < totalScenes)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -51,7 +52,6 @@ public class PauseAndEndGameUI : MonoBehaviour
                 gameObject.SetActive(false);
                 p1InventoryUI.SetActive(true);
                 gameIsPaused = false;
-                Debug.Log("Unpausing Game");
             }
         }
         else if (!cSwitch.p1Active)
@@ -67,11 +67,8 @@ public class PauseAndEndGameUI : MonoBehaviour
                 gameObject.SetActive(false);
                 p2InventoryUI.SetActive(true);
                 gameIsPaused = false;
-                Debug.Log("Unpausing Game");
             }
         }
-
-        Debug.Log("Pause pressed");
     }
 
     public void EndGame() { SceneManager.LoadScene(0); audioManager.startOfGame = true; audioManager.UpdateMusic(); gameWinObj.SetActive(true); gameWin = true; }
