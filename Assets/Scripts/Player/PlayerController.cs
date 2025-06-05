@@ -163,6 +163,81 @@ public class PlayerController : MonoBehaviour
 
             }
             #endregion
+            #region DOOR INTERACTION
+            // Open doors
+            else if (detectedObject.CompareTag("Door"))
+            {
+                Door door = detectedObject.GetComponent<Door>();
+                if (cSwitch.p1Active) //if Character 1 is active
+                {
+                    KeyItem keyItem = p1ItemObject.GetComponent<KeyItem>();
+
+                    if (keyItem != null && keyItem.keyColourOpen == door.thisDoorColour) //Compare key and door colors
+                    {
+                        //Get all doors in the scene
+                        Door[] allDoors = FindObjectsOfType<Door>();
+
+                        foreach (Door otherDoor in allDoors)
+                        {
+                            //if key and door colour match, open all doors of the same colour in the scene
+                            if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
+                            {
+                                otherDoor.OpenDoor();
+                            }
+
+                            //based on the assigned colour to close on the key, close all doors of said colour in the scene
+                            if (keyItem.keyColourClose == otherDoor.thisDoorColour)
+                            {
+                                otherDoor.CloseDoor();
+                            }
+                        }
+
+                        Debug.Log($"Used {keyItem.keyColourOpen} key: Opened all {keyItem.keyColourOpen} doors and closed all {keyItem.keyColourClose} doors.");
+                        return;
+                    }
+                    else if(keyItem == null) { Debug.LogWarning("No key available in " + p1Inventory.itemSlot[p1ArrayIndex]); }
+                    else
+                    {
+                        Debug.LogWarning($"Key '{keyItem.keyColourOpen}' does not match door '{door.thisDoorColour}'.");
+                        return;
+                    }
+                }
+                else if (!cSwitch.p1Active) //if Character 2 is active
+                {
+                    KeyItem keyItem = p2ItemObject.GetComponent<KeyItem>();
+
+                    if (keyItem != null && keyItem.keyColourOpen == door.thisDoorColour) //Compare key and door colors
+                    {
+                        //Get all doors in the scene
+                        Door[] allDoors = FindObjectsOfType<Door>();
+
+                        foreach (Door otherDoor in allDoors)
+                        {
+                            //if key and door colour match, open all doors of the same colour in the scene
+                            if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
+                            {
+                                otherDoor.OpenDoor();
+                            }
+
+                            //based on the assigned colour to close on the key, close all doors of said colour in the scene
+                            if (keyItem.keyColourClose == otherDoor.thisDoorColour)
+                            {
+                                otherDoor.CloseDoor();
+                            }
+                        }
+
+                        Debug.Log($"Used {keyItem.keyColourOpen} key: Opened all {keyItem.keyColourOpen} doors and closed all {keyItem.keyColourClose} doors.");
+                        return;
+                    }
+                    else if (keyItem == null) { Debug.LogWarning("No key available in " + p2Inventory.itemSlot[p2ArrayIndex]); }
+                    else
+                    {
+                        Debug.LogWarning($"Key '{keyItem.keyColourOpen}' does not match door '{door.thisDoorColour}'.");
+                        return;
+                    }
+                }
+            }
+            #endregion
             #region PLATFORM INTERACTION
             // Place items on platforms & transfer after 2s delay
             else if (detectedObject.CompareTag("Platform"))
@@ -213,79 +288,6 @@ public class PlayerController : MonoBehaviour
                     {
                         Debug.LogWarning("can not place item on to platform");
                     }
-                }
-            }
-            #endregion
-            #region DOOR INTERACTION
-            // Open doors
-            else if (detectedObject.CompareTag("Door"))
-            {
-                Door door = detectedObject.GetComponent<Door>();
-                if (cSwitch.p1Active) //if Character 1 is active
-                {
-                    KeyItem keyItem = p1ItemObject.GetComponent<KeyItem>();
-
-                    if (keyItem != null && keyItem.keyColourOpen == door.thisDoorColour) //Compare key and door colors
-                    {
-                        //Get all doors in the scene
-                        Door[] allDoors = FindObjectsOfType<Door>();
-
-                        foreach (Door otherDoor in allDoors)
-                        {
-                            //if key and door colour match, open all doors of the same colour in the scene
-                            if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
-                            {
-                                otherDoor.OpenDoor();
-                            }
-
-                            //based on the assigned colour to close on the key, close all doors of said colour in the scene
-                            if (keyItem.keyColourClose == otherDoor.thisDoorColour)
-                            {
-                                otherDoor.CloseDoor();
-                            }
-                        }
-
-                        Debug.Log($"Used {keyItem.keyColourOpen} key: Opened all {keyItem.keyColourOpen} doors and closed all {keyItem.keyColourClose} doors.");
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"Key '{keyItem.keyColourOpen}' does not match door '{door.thisDoorColour}'.");
-                    }
-
-                    if(keyItem == null) { Debug.LogWarning("No key available in " + p1Inventory.itemSlot[p1ArrayIndex]); }
-                }
-                else if (!cSwitch.p1Active) //if Character 2 is active
-                {
-                    KeyItem keyItem = p2ItemObject.GetComponent<KeyItem>();
-
-                    if (keyItem != null && keyItem.keyColourOpen == door.thisDoorColour) //Compare key and door colors
-                    {
-                        //Get all doors in the scene
-                        Door[] allDoors = FindObjectsOfType<Door>();
-
-                        foreach (Door otherDoor in allDoors)
-                        {
-                            //if key and door colour match, open all doors of the same colour in the scene
-                            if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
-                            {
-                                otherDoor.OpenDoor();
-                            }
-
-                            //based on the assigned colour to close on the key, close all doors of said colour in the scene
-                            if (keyItem.keyColourClose == otherDoor.thisDoorColour)
-                            {
-                                otherDoor.CloseDoor();
-                            }
-                        }
-
-                        Debug.Log($"Used {keyItem.keyColourOpen} key: Opened all {keyItem.keyColourOpen} doors and closed all {keyItem.keyColourClose} doors.");
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"Key '{keyItem.keyColourOpen}' does not match door '{door.thisDoorColour}'.");
-                    }
-
-                    if (keyItem == null) { Debug.LogWarning("No key available in " + p2Inventory.itemSlot[p2ArrayIndex]); }
                 }
             }
             #endregion

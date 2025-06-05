@@ -109,7 +109,9 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             {
                 // Place item onto platform if nearby
                 platform1.PlaceItem(itemObject);
+               
                 Debug.Log($"Placed '{itemObject.name}' onto platform: {platform1.gameObject.name}");
+                EmptySlot();
             }
             else
             {
@@ -117,7 +119,9 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
                 Vector3 dropPosition = playerObj.transform.position + playerObj.transform.forward * respawnDistance;
                 itemObject.transform.position = dropPosition;
                 itemObject.SetActive(true);
+               
                 Debug.Log($"Dropped '{itemObject.name}' in front of player.");
+                EmptySlot();
             }
         }
         #endregion
@@ -137,19 +141,23 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             {
                 // Place item onto platform if nearby
                 platform2.PlaceItem(itemObject);
+               
                 Debug.Log($"Placed '{itemObject.name}' onto platform: {platform2.gameObject.name}");
+                EmptySlot();
             }
             else
             {
                 // Drop item in front of player
                 Vector3 dropPosition = playerObj.transform.position + playerObj.transform.forward * respawnDistance;
                 itemObject.transform.position = dropPosition;
+                
                 itemObject.SetActive(true);
                 Debug.Log($"Dropped '{itemObject.name}' in front of player.");
+                EmptySlot();
             }
         }
         #endregion
-        EmptySlot();
+       // EmptySlot();
     }
 
     public void Update()
