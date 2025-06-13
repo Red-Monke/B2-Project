@@ -22,8 +22,6 @@ public class ThirdPersonCamera : MonoBehaviour
         //initialize orbit position
         transform.position = orbitPoint.position - (transform.forward * orbitDistance);
     }
-
-
     // Update is called once per frame
     void Update()
     {
@@ -68,9 +66,6 @@ public class ThirdPersonCamera : MonoBehaviour
         if (!isRotating)
         {
             smoothVelocity = Vector3.Lerp(smoothVelocity, Vector3.zero, Time.deltaTime / smoothTime);
-        }
-        
-        
+        }  
     }
-
 }

@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a8a75c26a60670442a94fae470f7fe01, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129927ed661e2444d870befab79f3af8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisDoorColour: 4
+  thisDoorColour: 16
   doorOpenSFX: {fileID: 8300000, guid: 1e5c66c2887b81b45960e87062f533eb, type: 3}
   doorVolume: 1
 --- !u!82 &7932150851251212797

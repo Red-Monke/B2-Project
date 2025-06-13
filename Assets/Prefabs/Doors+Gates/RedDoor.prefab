@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129927ed661e2444d870befab79f3af8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisDoorColour: 0
+  thisDoorColour: 1
   doorOpenSFX: {fileID: 8300000, guid: 876b3ba72ed279440badb19d8eda640b, type: 3}
   doorVolume: 1
 --- !u!82 &4745537438411267726

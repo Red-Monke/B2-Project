@@ -101,10 +101,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Green Key
   sprite: {fileID: 21300000, guid: a6f71f91fcbafff439935f61e67d5443, type: 3}
-  itemDescription: 'Open Green Doors
-
-
-    Close Red Doors'
   collected: 0
   assignedPlatform: {fileID: 0}
 --- !u!114 &5311008890650794713
@@ -119,8 +115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d989c6cfa0c774741b3983b4ec14aaa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyColourOpen: 1
-  keyColourClose: 0
+  keyColourOpen: 2
+  keyColourClose: 1
   keySFX: {fileID: 8300000, guid: 4a06e3895cf0d044eade21dd79e08261, type: 3}
 --- !u!65 &4914077809648416753
 BoxCollider:

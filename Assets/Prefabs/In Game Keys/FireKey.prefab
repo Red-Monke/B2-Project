@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d989c6cfa0c774741b3983b4ec14aaa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyColourOpen: 0
-  keyColourClose: 2
+  keyColourOpen: 1
+  keyColourClose: 4
   keySFX: {fileID: 8300000, guid: 35b325c329ba29346af25ccc3050d0f0, type: 3}
 --- !u!114 &7906696381615222135
 MonoBehaviour:
@@ -116,10 +116,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Red Key
   sprite: {fileID: 21300000, guid: 953112ad23164174481ff2969e8cb049, type: 3}
-  itemDescription: 'Open Red Doors
-
-
-    Close Blue Doors'
   collected: 0
   assignedPlatform: {fileID: 0}
 --- !u!65 &4777335317922878131

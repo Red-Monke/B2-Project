@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d989c6cfa0c774741b3983b4ec14aaa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyColourOpen: 3
-  keyColourClose: 4
+  keyColourOpen: 8
+  keyColourClose: 16
   keySFX: {fileID: 8300000, guid: 4dcc45ebc7532fb4186a7a4eab37d9ef, type: 3}
 --- !u!114 &2612631139548644078
 MonoBehaviour:
@@ -116,10 +116,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Black Key
   sprite: {fileID: 21300000, guid: 92ea8fbeb61433841af9cab888a1561e, type: 3}
-  itemDescription: 'Open Black Doors
-
-
-    Close White Doors'
   collected: 0
   assignedPlatform: {fileID: 0}
 --- !u!65 &5948958333296501108

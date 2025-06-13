@@ -180,13 +180,13 @@ public class PlayerController : MonoBehaviour
                         foreach (Door otherDoor in allDoors)
                         {
                             //if key and door colour match, open all doors of the same colour in the scene
-                            if (keyItem.keyColourOpen == otherDoor.thisDoorColour)
+                            if ((keyItem.keyColourOpen & otherDoor.thisDoorColour) != 0)
                             {
                                 otherDoor.OpenDoor();
                             }
 
                             //based on the assigned colour to close on the key, close all doors of said colour in the scene
-                            if (keyItem.keyColourClose == otherDoor.thisDoorColour)
+                            if ((keyItem.keyColourClose & otherDoor.thisDoorColour) != 0)
                             {
                                 otherDoor.CloseDoor();
                             }

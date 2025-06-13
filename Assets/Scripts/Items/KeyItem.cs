@@ -16,14 +16,14 @@ namespace DoorOperations
             AudioManager.Instance.PlaySFX(keySFX);
             Debug.Log($"Used key {gameObject.name}.");
         }
-
+        [System.Flags]
         public enum KeyColour
         {
-            Red,
-            Green,
-            Blue,
-            Black,
-            White
+            Red = 1,
+            Green = 2,
+            Blue = 4,
+            Black = 8,
+            White = 16
         }
     }
 }
