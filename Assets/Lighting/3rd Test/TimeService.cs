@@ -14,9 +14,9 @@ public class TimeService
     public event Action OnSunSet = delegate { };
     public event Action OnHourChange = delegate { };
 
-    Observer<bool> isDayTime;
-    Observer<int> currentHour;
-
+    readonly Observer<bool> isDayTime;
+    readonly Observer<int> currentHour;
+    
     public TimeService(TimeSettings settings)
     {
         this.settings = settings;
@@ -41,7 +41,9 @@ public class TimeService
     public float CalculateSunAngle()
     {
         bool isDay = IsDayTime();
-        float startDegree = isDay ? 0 : 100;
+
+        float startDegree = isDay ? 0 : 180;
+
         TimeSpan start = isDay ? sunriseTime : sunsetime;
         TimeSpan end = isDay ? sunsetime : sunriseTime;
 
@@ -55,7 +57,7 @@ public class TimeService
     public DateTime CurrentTime => currentTime;
 
     //if the current time is past the sunrise time but before sunset time, return true
-    bool IsDayTime() => currentTime.TimeOfDay > sunriseTime && currentTime.TimeOfDay < sunsetime;
+    public bool IsDayTime() => currentTime.TimeOfDay >= sunriseTime && currentTime.TimeOfDay <= sunsetime;
 
     //if value is negative (from val is later than to val), add 24 hours to account for the time difference being the next day 
     TimeSpan CalculateDifference(TimeSpan from, TimeSpan to)

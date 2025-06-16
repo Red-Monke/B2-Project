@@ -3318,7 +3318,7 @@ MonoBehaviour:
   dayLight: {fileID: 705507994}
   nightLight: {fileID: 787054735}
   maxDayLightIntensity: 1
-  maxNightLightIntensity: 1
+  maxNightLightIntensity: 0.5
   lightIntensityCurve:
     serializedVersion: 2
     m_Curve:
@@ -3352,8 +3352,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  dayAmbientLight: {r: 1, g: 0.9792453, b: 0.8443396, a: 0}
-  nightAmbientLight: {r: 0.37166253, g: 0.4626398, b: 0.9056604, a: 0}
+  dayAmbientLight: {r: 1, g: 1, b: 1, a: 0}
+  nightAmbientLight: {r: 0.43596476, g: 0.523376, b: 0.9528302, a: 0}
   volume: {fileID: 1830145310}
 --- !u!4 &1579440784
 Transform:

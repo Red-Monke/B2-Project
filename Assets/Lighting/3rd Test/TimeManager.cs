@@ -40,12 +40,22 @@ public class TimeManager : MonoBehaviour
 
     void UpdateLightSettings()
     {
-        float dotProduct = Vector3.Dot(dayLight.transform.forward, Vector3.down);
-        dayLight.intensity = Mathf.Lerp(0, maxDayLightIntensity, lightIntensityCurve.Evaluate(dotProduct));
-        nightLight.intensity = Mathf.Lerp(0, maxNightLightIntensity, lightIntensityCurve.Evaluate(dotProduct));
+        bool isNight = !service.IsDayTime();
+        nightLight.enabled = isNight;
+        dayLight.enabled = !isNight;
 
-        if (colorAdjustments == null) return;
-        colorAdjustments.colorFilter.value = Color.Lerp(nightAmbientLight, dayAmbientLight, lightIntensityCurve.Evaluate(dotProduct));
+        float dotProduct = Vector3.Dot(dayLight.transform.forward, Vector3.down);
+        
+        dayLight.intensity = Mathf.Lerp(0, maxDayLightIntensity, lightIntensityCurve.Evaluate(dotProduct));
+        nightLight.intensity = Mathf.Lerp(0, maxNightLightIntensity, lightIntensityCurve.Evaluate(1 - dotProduct));
+
+        if (colorAdjustments != null) 
+        { 
+            colorAdjustments.colorFilter.value = Color.Lerp(nightAmbientLight, dayAmbientLight, lightIntensityCurve.Evaluate(dotProduct)); 
+        }
+        else { return; }
+        
+        
     }
 
     void RotateSun()
