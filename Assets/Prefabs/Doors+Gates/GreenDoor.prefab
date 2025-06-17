@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 735505083670284711}
   - component: {fileID: 6043430206539153047}
   - component: {fileID: -6000589743591173954}
+  - component: {fileID: 5847414853625968590}
   m_Layer: 9
   m_Name: GreenDoor
   m_TagString: Door
@@ -218,3 +219,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5847414853625968590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6153853186249057089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f8e347137a2eb40ba94d224cab685a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 8918338129954477674}
+  nightEmissionColor: {r: 0.054901965, g: 0.6313726, b: 0, a: 1}
+  emissionIntensity: 4

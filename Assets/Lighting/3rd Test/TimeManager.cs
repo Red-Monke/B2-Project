@@ -10,7 +10,8 @@ public class TimeManager : MonoBehaviour
     [Header("Object References")]
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] TimeSettings timeSettings;
-    TimeService service;
+    public TimeService service;
+    public static TimeManager Instance;
 
     [Header("Lights used")]
     [SerializeField] Light dayLight;
@@ -54,8 +55,20 @@ public class TimeManager : MonoBehaviour
             colorAdjustments.colorFilter.value = Color.Lerp(nightAmbientLight, dayAmbientLight, lightIntensityCurve.Evaluate(dotProduct)); 
         }
         else { return; }
-        
-        
+    }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); //keep this instance across all scenes
+
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject); // erase any duplicates in scene before scene loads.
+        }
     }
 
     void RotateSun()
@@ -72,5 +85,6 @@ public class TimeManager : MonoBehaviour
         {
             timeText.text = service.CurrentTime.ToString("HH:mm");
         }
+       
     }
 }

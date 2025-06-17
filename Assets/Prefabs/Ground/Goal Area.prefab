@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8660507613060016910}
   - component: {fileID: 8906458122097192338}
   - component: {fileID: 4961473176878622815}
+  - component: {fileID: 6585762955193350352}
   m_Layer: 3
   m_Name: Goal Area
   m_TagString: Goal
@@ -106,6 +107,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6585762955193350352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981840532066369545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f8e347137a2eb40ba94d224cab685a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 8906458122097192338}
+  nightEmissionColor: {r: 0.65882355, g: 0.53333336, b: 0, a: 1}
+  emissionIntensity: 7.5
 --- !u!1 &8084443817697240385
 GameObject:
   m_ObjectHideFlags: 0

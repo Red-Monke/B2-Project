@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7827786324381790688}
   - component: {fileID: 8564781658346454937}
   - component: {fileID: 2870663625205588144}
+  - component: {fileID: 2568213784640344034}
   m_Layer: 9
   m_Name: LightKey
   m_TagString: Item
@@ -30,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1376003105993923818}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 11.16, y: -0, z: 16.92}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
@@ -166,3 +167,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &2568213784640344034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376003105993923818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f8e347137a2eb40ba94d224cab685a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 3498670547164296738}
+  nightEmissionColor: {r: 1, g: 1, b: 1, a: 0}
+  emissionIntensity: 3
