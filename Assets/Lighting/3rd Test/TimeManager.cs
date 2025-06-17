@@ -36,6 +36,7 @@ public class TimeManager : MonoBehaviour
     {
         UpdateTimeOfDay();
         RotateSun();
+        RotateMoon();
         UpdateLightSettings();
     }
 
@@ -75,6 +76,12 @@ public class TimeManager : MonoBehaviour
     {
         float rotation = service.CalculateSunAngle();
         dayLight.transform.rotation = Quaternion.AngleAxis(rotation, Vector3.right);
+    }
+
+    void RotateMoon()
+    {
+        float rotation = service.CalculateMoonAngle();
+        nightLight.transform.rotation = Quaternion.AngleAxis(rotation + 180, Vector3.right);
     }
 
     void UpdateTimeOfDay()

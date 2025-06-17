@@ -54,6 +54,23 @@ public class TimeService
         return Mathf.Lerp(startDegree, startDegree + 180, (float)percentage);
     }
 
+    public float CalculateMoonAngle()
+    {
+        bool isDay = IsDayTime();
+
+        float startDegree = isDay ? 0 : 180;
+
+        TimeSpan start = isDay ? sunriseTime : sunsetime;
+        TimeSpan end = isDay ? sunsetime : sunriseTime;
+
+        TimeSpan totalTime = CalculateDifference(start, end);
+        TimeSpan elapsedTime = CalculateDifference(start, currentTime.TimeOfDay);
+
+        double percentage = elapsedTime.TotalMinutes / totalTime.TotalMinutes;
+        return Mathf.Lerp(startDegree, startDegree + 180, (float)percentage);
+    }
+
+
     public DateTime CurrentTime => currentTime;
 
     //if the current time is past the sunrise time but before sunset time, return true
