@@ -1398,7 +1398,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1737401952}
         m_TargetAssemblyTypeName: PauseAndEndGameUI, Assembly-CSharp
         m_MethodName: Pause
         m_Mode: 1
@@ -11736,7 +11736,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1737401952}
         m_TargetAssemblyTypeName: PauseAndEndGameUI, Assembly-CSharp
         m_MethodName: Pause
         m_Mode: 1
